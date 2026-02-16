@@ -42,7 +42,7 @@ function GoogleIcon(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
-export default function LoginPage() {
+export default function SignupPage() {
   return (
     <div className="flex min-h-screen w-full items-center justify-center bg-background p-4">
       <Card className="mx-auto w-full max-w-md">
@@ -50,13 +50,23 @@ export default function LoginPage() {
           <div className="flex justify-center">
             <Logo />
           </div>
-          <CardTitle className="text-2xl">Welcome Back</CardTitle>
+          <CardTitle className="text-2xl">Create Your Account</CardTitle>
           <CardDescription>
-            Log in to access your dashboard and find your next opportunity.
+            Join a community of top-tier freelance talent.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4">
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="first-name">First Name</Label>
+                <Input id="first-name" placeholder="Jane" required />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="last-name">Last Name</Label>
+                <Input id="last-name" placeholder="Doe" required />
+              </div>
+            </div>
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -67,19 +77,11 @@ export default function LoginPage() {
               />
             </div>
             <div className="grid gap-2">
-              <div className="flex items-center">
-                <Label htmlFor="password">Password</Label>
-                <Link
-                  href="#"
-                  className="ml-auto inline-block text-sm underline"
-                >
-                  Forgot your password?
-                </Link>
-              </div>
+              <Label htmlFor="password">Password</Label>
               <Input id="password" type="password" required />
             </div>
             <Button type="submit" className="w-full" asChild>
-              <Link href="/dashboard">Log In</Link>
+              <Link href="/dashboard">Create Account</Link>
             </Button>
             <div className="relative my-2">
               <Separator />
@@ -89,13 +91,13 @@ export default function LoginPage() {
             </div>
             <Button variant="outline" className="w-full">
               <GoogleIcon className="mr-2 h-4 w-4" />
-              Continue with Google
+              Sign up with Google
             </Button>
           </div>
           <div className="mt-6 text-center text-sm">
-            Don&apos;t have an account?{' '}
-            <Link href="/signup" className="underline font-semibold">
-              Sign up
+            Already have an account?{' '}
+            <Link href="/login" className="underline font-semibold">
+              Log in
             </Link>
           </div>
         </CardContent>

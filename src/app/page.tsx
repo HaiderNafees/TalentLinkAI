@@ -24,7 +24,7 @@ export default function Home() {
             <Link href="/login">Log In</Link>
           </Button>
           <Button asChild>
-            <Link href="/dashboard">Get Started</Link>
+            <Link href="/signup">Get Started</Link>
           </Button>
         </nav>
       </header>
