@@ -2,13 +2,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from '@/components/ui/carousel';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
@@ -214,33 +207,42 @@ export default function Testimonials() {
             Outlier experts growing their careers in tech and AI
           </h2>
         </div>
-        <div className="mt-12">
-          <Carousel
-            opts={{
-              align: 'start',
-              loop: true,
-            }}
-            className="w-full"
+        <div className="mt-12 relative flex overflow-hidden group [--gap:2rem]">
+          <div className="flex shrink-0 gap-8 animate-marquee group-hover:[animation-play-state:paused]">
+            {testimonials.map((testimonial, index) => (
+              <div
+                key={index}
+                className="w-[300px] sm:w-[350px] flex-shrink-0"
+              >
+                <div className="p-1 h-full">
+                  {testimonial.type === 'video' ? (
+                    <VideoCard {...testimonial} />
+                  ) : (
+                    <QuoteCard {...testimonial} />
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div
+            aria-hidden="true"
+            className="flex shrink-0 gap-8 animate-marquee group-hover:[animation-play-state:paused]"
           >
-            <CarouselContent>
-              {testimonials.map((testimonial, index) => (
-                <CarouselItem
-                  key={index}
-                  className="sm:basis-1/2 lg:basis-1/3 xl:basis-1/4"
-                >
-                  <div className="p-1 h-full">
-                    {testimonial.type === 'video' ? (
-                      <VideoCard {...testimonial} />
-                    ) : (
-                      <QuoteCard {...testimonial} />
-                    )}
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious className="hidden md:flex" />
-            <CarouselNext className="hidden md:flex" />
-          </Carousel>
+            {testimonials.map((testimonial, index) => (
+              <div
+                key={index}
+                className="w-[300px] sm:w-[350px] flex-shrink-0"
+              >
+                <div className="p-1 h-full">
+                  {testimonial.type === 'video' ? (
+                    <VideoCard {...testimonial} />
+                  ) : (
+                    <QuoteCard {...testimonial} />
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
