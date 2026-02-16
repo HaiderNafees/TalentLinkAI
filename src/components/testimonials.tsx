@@ -12,6 +12,11 @@ import {
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 
 const testimonials = [
   {
@@ -44,6 +49,13 @@ const testimonials = [
   },
 ];
 
+const videoMap: Record<string, string> = {
+  'testimonial-video-1':
+    'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
+  'testimonial-video-2':
+    'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
+};
+
 const VideoCard = ({
   name,
   role,
@@ -54,46 +66,59 @@ const VideoCard = ({
   videoId: string;
 }) => {
   const videoImage = PlaceHolderImages.find((p) => p.id === videoId);
+  const videoUrl = videoMap[videoId];
+
   return (
-    <Card className="h-full">
-      <CardContent className="relative aspect-[9/16] h-full w-full p-0">
-        {videoImage ? (
-          <Image
-            src={videoImage.imageUrl}
-            alt={`Testimonial from ${name}`}
-            fill
-            className="object-cover rounded-lg"
-            data-ai-hint={videoImage.imageHint}
+    <Dialog>
+      <DialogTrigger asChild>
+        <Card className="h-full cursor-pointer group">
+          <CardContent className="relative aspect-[9/16] h-full w-full p-0">
+            {videoImage ? (
+              <Image
+                src={videoImage.imageUrl}
+                alt={`Testimonial from ${name}`}
+                fill
+                className="object-cover rounded-lg transition-transform duration-300 group-hover:scale-105"
+                data-ai-hint={videoImage.imageHint}
+              />
+            ) : (
+              <div className="w-full h-full bg-muted flex items-center justify-center rounded-lg">
+                <p className="text-muted-foreground">Video placeholder</p>
+              </div>
+            )}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent rounded-lg" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="bg-black/50 rounded-full h-16 w-16 flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:bg-black/70">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="48"
+                  height="48"
+                  viewBox="0 0 24 24"
+                  fill="white"
+                  className="w-8 h-8 ml-1"
+                >
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </div>
+            </div>
+            <div className="absolute bottom-4 left-4 text-white">
+              <p className="font-bold">{name}</p>
+              <p className="text-sm">{role}</p>
+            </div>
+          </CardContent>
+        </Card>
+      </DialogTrigger>
+      <DialogContent className="p-0 border-0 max-w-4xl bg-transparent">
+        {videoUrl && (
+          <video
+            src={videoUrl}
+            controls
+            autoPlay
+            className="w-full aspect-video rounded-lg"
           />
-        ) : (
-          <div className="w-full h-full bg-muted flex items-center justify-center rounded-lg">
-            <p className="text-muted-foreground">Video placeholder</p>
-          </div>
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent rounded-lg" />
-        <div className="absolute bottom-4 left-4 text-white">
-          <p className="font-bold">{name}</p>
-          <p className="text-sm">{role}</p>
-        </div>
-        <div className="absolute top-4 right-4 text-white">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="h-6 w-6"
-          >
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-          </svg>
-        </div>
-      </CardContent>
-    </Card>
+      </DialogContent>
+    </Dialog>
   );
 };
 
