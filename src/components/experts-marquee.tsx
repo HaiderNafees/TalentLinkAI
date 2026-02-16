@@ -19,8 +19,7 @@ const items = [
       id: 'cuong-n',
       name: 'Cuong N.',
       role: 'SWE, Zinza Tech',
-      width: 180,
-      height: 270,
+      aspect: 'aspect-[3/4]',
     },
   },
   {
@@ -30,8 +29,7 @@ const items = [
       id: 'max-n',
       name: 'Max N.',
       role: 'Generalist, Poland',
-      width: 180,
-      height: 240,
+      aspect: 'aspect-[4/5]',
     },
   },
   {
@@ -43,8 +41,7 @@ const items = [
           id: 'robin-francis',
           name: 'Robin Francis',
           role: 'Math Expert, US',
-          width: 180,
-          height: 180,
+          aspect: 'aspect-square',
         },
       },
       {
@@ -64,8 +61,7 @@ const items = [
       id: 'nicholas',
       name: 'Nicholas',
       role: 'Math Expert, SA',
-      width: 180,
-      height: 255,
+      aspect: 'aspect-[3/4]',
     },
   },
   {
@@ -85,8 +81,7 @@ const items = [
           id: 'enzo-d',
           name: 'Enzo D.',
           role: 'Dutch Language Expert',
-          width: 180,
-          height: 180,
+          aspect: 'aspect-square',
         },
       },
     ],
@@ -98,8 +93,7 @@ const items = [
       id: 'tara',
       name: 'Tara',
       role: 'Coding Expert, Australia',
-      width: 180,
-      height: 270,
+      aspect: 'aspect-[3/4]',
     },
   },
 ];
@@ -108,20 +102,20 @@ const ExpertCard = ({
   expertId,
   name,
   role,
-  width,
-  height,
+  aspect,
 }: {
   expertId: string;
   name: string;
   role: string;
-  width: number;
-  height: number;
+  aspect: string;
 }) => {
   const expertImage = PlaceHolderImages.find((p) => p.id === expertId);
   return (
     <div
-      className="relative rounded-2xl overflow-hidden shadow-lg"
-      style={{ width: `${width}px`, height: `${height}px` }}
+      className={cn(
+        'relative rounded-2xl overflow-hidden shadow-lg w-32 sm:w-40',
+        aspect
+      )}
     >
       {expertImage && (
         <Image
@@ -129,6 +123,7 @@ const ExpertCard = ({
           alt={name}
           fill
           className="object-cover"
+          sizes="(max-width: 640px) 128px, 160px"
           data-ai-hint={expertImage?.imageHint}
         />
       )}
@@ -152,7 +147,7 @@ const StatCard = ({
 }) => (
   <div
     className={cn(
-      'w-[180px] h-[120px] rounded-2xl shadow-lg p-4 flex flex-col justify-center',
+      'w-32 sm:w-40 h-32 rounded-2xl shadow-lg p-4 flex flex-col justify-center',
       className
     )}
   >

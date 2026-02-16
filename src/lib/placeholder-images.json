@@ -71,6 +71,18 @@
       "description": "Video testimonial from Andrew",
       "imageUrl": "https://images.unsplash.com/photo-1560250056-07ba64664864?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtYW4lMjBjb2Rpbmd8ZW58MHx8fHwxNzcxMjEwMTU4fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "man coding"
+    },
+    {
+      "id": "alex-r",
+      "description": "Avatar for Alex R.",
+      "imageUrl": "https://images.unsplash.com/photo-1542909168-82c3e7fdca5c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxwZXJzb24lMjBwb3J0cmFpdHxlbnwwfHx8fDE3NzEyMTAzMDd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person portrait"
+    },
+    {
+      "id": "testimonial-video-3",
+      "description": "Video testimonial from Samantha B.",
+      "imageUrl": "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx3b21hbiUyMGxhcHRvcHxlbnwwfHx8fDE3NzEyMTEyMzF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "woman laptop"
     }
   ]
 }

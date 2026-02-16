@@ -42,6 +42,20 @@ const testimonials = [
       "The work itself is fun. I'm learning about such a broad variety of topics because every time you see a task, you learn something new. I just learned some cool Swiss recipes for apple fritters.",
     avatarId: 'daliah-b',
   },
+  {
+    type: 'quote',
+    name: 'Alex R.',
+    role: 'AI Specialist, Germany',
+    quote:
+      'The AI matching is incredibly accurate. It saved me countless hours of searching and connected me with a high-paying project that was a perfect fit for my skills.',
+    avatarId: 'alex-r',
+  },
+  {
+    type: 'video',
+    name: 'Samantha B.',
+    role: 'Data Scientist, UK',
+    videoId: 'testimonial-video-3',
+  },
 ];
 
 const videoMap: Record<string, string> = {
@@ -49,6 +63,8 @@ const videoMap: Record<string, string> = {
     'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
   'testimonial-video-2':
     'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
+  'testimonial-video-3':
+    'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
 };
 
 const VideoCard = ({
