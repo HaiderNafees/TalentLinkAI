@@ -113,7 +113,7 @@ const ExpertCard = ({
   return (
     <div
       className={cn(
-        'relative rounded-2xl overflow-hidden shadow-lg w-32 sm:w-40',
+        'relative rounded-2xl overflow-hidden shadow-lg w-28 sm:w-32 md:w-40',
         aspect
       )}
     >
@@ -123,7 +123,7 @@ const ExpertCard = ({
           alt={name}
           fill
           className="object-cover"
-          sizes="(max-width: 640px) 128px, 160px"
+          sizes="(max-width: 640px) 112px, (max-width: 768px) 128px, 160px"
           data-ai-hint={expertImage?.imageHint}
         />
       )}
@@ -147,7 +147,7 @@ const StatCard = ({
 }) => (
   <div
     className={cn(
-      'w-32 sm:w-40 h-32 rounded-2xl shadow-lg p-4 flex flex-col justify-center',
+      'w-28 sm:w-32 md:w-40 h-32 rounded-2xl shadow-lg p-4 flex flex-col justify-center',
       className
     )}
   >
@@ -168,7 +168,7 @@ const MarqueeItem = ({
   let content;
   if (item.type === 'column') {
     content = (
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-4 sm:gap-6 md:gap-8">
         {item.cards.map((card, idx) => {
           if (card.cardType === 'expert') {
             return <ExpertCard key={idx} {...card.data} />;
@@ -189,15 +189,15 @@ const MarqueeItem = ({
 export default function ExpertsMarquee() {
   return (
     <section className="w-full py-16 md:py-24 lg:py-32 bg-transparent">
-      <div className="relative flex overflow-hidden group [--gap:2rem]">
-        <div className="flex items-start shrink-0 gap-8 px-4 animate-marquee group-hover:[animation-play-state:paused]">
+      <div className="relative flex overflow-hidden group [--gap:1rem] sm:[--gap:1.5rem] md:[--gap:2rem]">
+        <div className="flex items-start shrink-0 gap-4 sm:gap-6 md:gap-8 px-4 animate-marquee group-hover:[animation-play-state:paused]">
           {items.map((item, index) => (
             <MarqueeItem key={index} item={item} index={index} />
           ))}
         </div>
         <div
           aria-hidden="true"
-          className="flex items-start shrink-0 gap-8 px-4 animate-marquee group-hover:[animation-play-state:paused]"
+          className="flex items-start shrink-0 gap-4 sm:gap-6 md:gap-8 px-4 animate-marquee group-hover:[animation-play-state:paused]"
         >
           {items.map((item, index) => (
             <MarqueeItem key={index} item={item} index={index} />
