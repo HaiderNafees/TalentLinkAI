@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import {
   Carousel,
@@ -12,11 +12,6 @@ import {
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-} from '@/components/ui/dialog';
 
 const testimonials = [
   {
@@ -65,28 +60,55 @@ const VideoCard = ({
   role: string;
   videoId: string;
 }) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const videoImage = PlaceHolderImages.find((p) => p.id === videoId);
   const videoUrl = videoMap[videoId];
 
+  const handlePlayClick = () => {
+    setIsPlaying(true);
+  };
+
+  const handleVideoEnd = () => {
+    setIsPlaying(false);
+  };
+
+  useEffect(() => {
+    if (isPlaying && videoRef.current) {
+      videoRef.current.play();
+    }
+  }, [isPlaying]);
+
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Card className="h-full cursor-pointer group">
-          <CardContent className="relative aspect-[9/16] h-full w-full p-0">
+    <Card
+      className="h-full cursor-pointer group"
+      onClick={!isPlaying ? handlePlayClick : undefined}
+    >
+      <CardContent className="relative aspect-[9/16] h-full w-full p-0 rounded-lg overflow-hidden">
+        {isPlaying && videoUrl ? (
+          <video
+            ref={videoRef}
+            src={videoUrl}
+            controls
+            onEnded={handleVideoEnd}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <>
             {videoImage ? (
               <Image
                 src={videoImage.imageUrl}
                 alt={`Testimonial from ${name}`}
                 fill
-                className="object-cover rounded-lg transition-transform duration-300 group-hover:scale-105"
+                className="object-cover transition-transform duration-300 group-hover:scale-105"
                 data-ai-hint={videoImage.imageHint}
               />
             ) : (
-              <div className="w-full h-full bg-muted flex items-center justify-center rounded-lg">
+              <div className="w-full h-full bg-muted flex items-center justify-center">
                 <p className="text-muted-foreground">Video placeholder</p>
               </div>
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent rounded-lg" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="bg-black/50 rounded-full h-16 w-16 flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:bg-black/70">
                 <svg
@@ -105,20 +127,10 @@ const VideoCard = ({
               <p className="font-bold">{name}</p>
               <p className="text-sm">{role}</p>
             </div>
-          </CardContent>
-        </Card>
-      </DialogTrigger>
-      <DialogContent className="p-0 border-0 max-w-4xl bg-transparent">
-        {videoUrl && (
-          <video
-            src={videoUrl}
-            controls
-            autoPlay
-            className="w-full aspect-video rounded-lg"
-          />
+          </>
         )}
-      </DialogContent>
-    </Dialog>
+      </CardContent>
+    </Card>
   );
 };
 
