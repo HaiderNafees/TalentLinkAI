@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { cn } from '@/lib/utils';
-import { Button } from './ui/button';
 
 const items = [
   {
@@ -20,8 +19,8 @@ const items = [
       id: 'cuong-n',
       name: 'Cuong N.',
       role: 'SWE, Zinza Tech',
-      width: 240,
-      height: 360,
+      width: 180,
+      height: 270,
     },
   },
   {
@@ -31,8 +30,8 @@ const items = [
       id: 'max-n',
       name: 'Max N.',
       role: 'Generalist, Poland',
-      width: 240,
-      height: 320,
+      width: 180,
+      height: 240,
     },
   },
   {
@@ -44,8 +43,8 @@ const items = [
           id: 'robin-francis',
           name: 'Robin Francis',
           role: 'Math Expert, US',
-          width: 240,
-          height: 240,
+          width: 180,
+          height: 180,
         },
       },
       {
@@ -65,8 +64,8 @@ const items = [
       id: 'nicholas',
       name: 'Nicholas',
       role: 'Math Expert, SA',
-      width: 240,
-      height: 340,
+      width: 180,
+      height: 255,
     },
   },
   {
@@ -86,8 +85,8 @@ const items = [
           id: 'enzo-d',
           name: 'Enzo D.',
           role: 'Dutch Language Expert',
-          width: 240,
-          height: 240,
+          width: 180,
+          height: 180,
         },
       },
     ],
@@ -99,8 +98,8 @@ const items = [
       id: 'tara',
       name: 'Tara',
       role: 'Coding Expert, Australia',
-      width: 240,
-      height: 360,
+      width: 180,
+      height: 270,
     },
   },
 ];
@@ -153,12 +152,12 @@ const StatCard = ({
 }) => (
   <div
     className={cn(
-      'w-[240px] h-[160px] rounded-2xl shadow-lg p-6 flex flex-col justify-center',
+      'w-[180px] h-[120px] rounded-2xl shadow-lg p-4 flex flex-col justify-center',
       className
     )}
   >
-    <p className="text-4xl font-bold">{value}</p>
-    <p className="text-md mt-1">{label}</p>
+    <p className="text-3xl font-bold">{value}</p>
+    <p className="text-sm mt-1">{label}</p>
   </div>
 );
 
@@ -195,14 +194,6 @@ const MarqueeItem = ({
 export default function ExpertsMarquee() {
   return (
     <section className="w-full py-16 md:py-24 lg:py-32 bg-transparent">
-      <div className="container mx-auto text-center mb-12">
-        <Button
-          size="lg"
-          className="bg-chart-1 text-primary-foreground hover:bg-chart-1/90"
-        >
-          View Opportunities
-        </Button>
-      </div>
       <div className="relative flex overflow-hidden group [--gap:2rem]">
         <div className="flex items-start shrink-0 gap-8 px-4 animate-marquee group-hover:[animation-play-state:paused]">
           {items.map((item, index) => (
