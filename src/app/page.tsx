@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import Logo from '@/components/logo';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import ExpertsMarquee from '@/components/experts-marquee';
 
 export default function Home() {
   const heroImage = PlaceHolderImages.find((p) => p.id === 'hero');
@@ -21,8 +22,8 @@ export default function Home() {
           </Button>
         </nav>
       </header>
-      <main className="flex-grow flex items-center">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <main className="flex-grow">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-6 text-center md:text-left">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter font-headline text-primary">
@@ -57,6 +58,7 @@ export default function Home() {
             )}
           </div>
         </div>
+        <ExpertsMarquee />
       </main>
       <footer className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-muted-foreground">
         <p>

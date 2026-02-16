@@ -17,6 +17,42 @@
       "description": "Avatar for a sample client.",
       "imageUrl": "https://images.unsplash.com/photo-1594616838951-c155f8d978a0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxwZXJzb24lMjBhdmF0YXJ8ZW58MHx8fHwxNzcxMTA1NzgwfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "person avatar"
+    },
+    {
+      "id": "cuong-n",
+      "description": "Cuong N. giving a presentation.",
+      "imageUrl": "https://images.unsplash.com/photo-1595020879621-9d16e1d14c9f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxwZXJzb24lMjBwcmVzZW50YXRpb258ZW58MHx8fHwxNzcxMjA4NTYxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person presentation"
+    },
+    {
+      "id": "max-n",
+      "description": "Max N. outdoors.",
+      "imageUrl": "https://images.unsplash.com/photo-1541427582316-9324eea67ad4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxwZXJzb24lMjBvdXRkb29yc3xlbnwwfHx8fDE3NzEyMDg1NjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person outdoors"
+    },
+    {
+      "id": "robin-francis",
+      "description": "Headshot of Robin Francis.",
+      "imageUrl": "https://images.unsplash.com/photo-1606226420617-c1b2d5236689?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxwZXJzb24lMjBoZWFkc2hvdHxlbnwwfHx8fDE3NzEyMDg1NjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person headshot"
+    },
+    {
+      "id": "nicholas",
+      "description": "Nicholas at his laptop.",
+      "imageUrl": "https://images.unsplash.com/photo-1609270460854-e8ea8c0b591f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8cGVyc29uJTIwbGFwdG9wfGVufDB8fHx8MTc3MTEyNDYzMnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person laptop"
+    },
+    {
+      "id": "enzo-d",
+      "description": "Enzo D. on a boat.",
+      "imageUrl": "https://images.unsplash.com/photo-1674916252030-d4e35b273927?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxwZXJzb24lMjBib2F0fGVufDB8fHx8MTc3MTIwODU2MXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person boat"
+    },
+    {
+      "id": "tara",
+      "description": "Tara, a coding expert.",
+      "imageUrl": "https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxwZXJzb24lMjBzbWlsaW5nfGVufDB8fHx8MTc3MTEyNjc5MXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person smiling"
     }
   ]
 }
