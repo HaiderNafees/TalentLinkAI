@@ -34,7 +34,7 @@ export default function Footer() {
   return (
     <footer className="bg-sidebar-background text-sidebar-foreground">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-8">
           <div className="col-span-2 md:col-span-2">
             <Logo />
             <p className="mt-4 text-sm text-sidebar-foreground/70 max-w-xs">
@@ -76,6 +76,23 @@ export default function Footer() {
             </h3>
             <ul className="mt-4 space-y-3">
               {footerLinks.company.map((link) => (
+                <li key={link.label}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-sidebar-foreground/70 hover:text-sidebar-foreground transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h3 className="font-semibold text-sidebar-primary tracking-wider">
+              Legal
+            </h3>
+            <ul className="mt-4 space-y-3">
+              {footerLinks.legal.map((link) => (
                 <li key={link.label}>
                   <Link
                     href={link.href}
