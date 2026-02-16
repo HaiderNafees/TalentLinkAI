@@ -7,6 +7,7 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import ExpertsMarquee from '@/components/experts-marquee';
 import HowItWorks from '@/components/how-it-works';
 import WhyJoin from '@/components/why-join';
+import Testimonials from '@/components/testimonials';
 
 export default function Home() {
   const heroImage = PlaceHolderImages.find((p) => p.id === 'hero');
@@ -63,6 +64,7 @@ export default function Home() {
         <ExpertsMarquee />
         <HowItWorks />
         <WhyJoin />
+        <Testimonials />
       </main>
       <footer className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-muted-foreground">
         <p>
