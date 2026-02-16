@@ -260,14 +260,14 @@ export default function HowToApply() {
             Start in 4 simple steps
           </h2>
         </div>
-        <div className="grid lg:grid-cols-2 gap-16 mt-16 items-start">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 mt-16 items-start">
           <div className="space-y-4">
             {steps.map((step) => (
               <button
                 key={step.id}
                 onClick={() => setActiveStep(step.id)}
                 className={cn(
-                  'w-full text-left p-6 border-l-4 transition-all duration-300',
+                  'w-full text-left p-4 md:p-6 border-l-4 transition-all duration-300',
                   activeStep === step.id
                     ? 'border-primary bg-primary/5'
                     : 'border-border/50 hover:bg-muted/50'
@@ -302,7 +302,7 @@ export default function HowToApply() {
           <div className="relative">
             <div className="absolute -inset-1.5 bg-gradient-to-br from-orange-300 via-blue-300 to-rose-300 rounded-2xl blur-sm opacity-50"></div>
             <Card className="relative shadow-xl">
-              <CardContent className="p-8">
+              <CardContent className="p-6 md:p-8">
                 {renderStepContent(activeStep, setActiveStep)}
               </CardContent>
             </Card>

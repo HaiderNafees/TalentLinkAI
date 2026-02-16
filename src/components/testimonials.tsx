@@ -56,6 +56,22 @@ const testimonials = [
     role: 'Data Scientist, UK',
     videoId: 'testimonial-video-3',
   },
+  {
+    type: 'quote',
+    name: 'Chris P.',
+    role: 'Frontend Developer, USA',
+    quote:
+      'The quality of clients on Freelance Outlier is top-notch. I get to work on interesting and challenging projects that really push my skills forward.',
+    avatarId: 'cuong-n',
+  },
+  {
+    type: 'quote',
+    name: 'Maria G.',
+    role: 'UX Designer, Spain',
+    quote:
+      'I love the clean interface and how easy it is to manage my projects and communication. It makes the freelance process so much smoother.',
+    avatarId: 'robin-francis',
+  },
 ];
 
 const videoMap: Record<string, string> = {
@@ -100,7 +116,7 @@ const VideoCard = ({
       className="h-full cursor-pointer group"
       onClick={!isPlaying ? handlePlayClick : undefined}
     >
-      <CardContent className="relative aspect-[9/16] h-full w-full p-0 rounded-lg overflow-hidden">
+      <CardContent className="relative aspect-[4/5] h-full w-full p-0 rounded-lg overflow-hidden">
         {isPlaying && videoUrl ? (
           <video
             ref={videoRef}
@@ -210,7 +226,7 @@ export default function Testimonials() {
               {testimonials.map((testimonial, index) => (
                 <CarouselItem
                   key={index}
-                  className="md:basis-1/2 lg:basis-1/3 xl:basis-1/4"
+                  className="sm:basis-1/2 lg:basis-1/3 xl:basis-1/4"
                 >
                   <div className="p-1 h-full">
                     {testimonial.type === 'video' ? (
@@ -222,8 +238,8 @@ export default function Testimonials() {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="hidden lg:flex" />
-            <CarouselNext className="hidden lg:flex" />
+            <CarouselPrevious className="hidden md:flex" />
+            <CarouselNext className="hidden md:flex" />
           </Carousel>
         </div>
       </div>
