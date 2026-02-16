@@ -49,7 +49,7 @@ const items = [
 const ExpertCard = ({ expertId, name, role, width, height }: { expertId: string; name: string; role: string; width: number; height: number; }) => {
   const expertImage = PlaceHolderImages.find((p) => p.id === expertId);
   return (
-    <div className="relative rounded-2xl overflow-hidden shadow-lg" style={{ width: `${'${width}'}px`, height: `${'${height}'}px` }}>
+    <div className="relative rounded-2xl overflow-hidden shadow-lg" style={{ width: `${width}px`, height: `${height}px` }}>
       {expertImage && <Image
         src={expertImage?.imageUrl}
         alt={name}
