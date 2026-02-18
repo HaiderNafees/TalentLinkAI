@@ -37,22 +37,21 @@ function GoogleIcon(props: React.SVGProps<SVGSVGElement>) {
         d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
         fill="#EA4335"
       />
-      <path d="M1 1h22v22H1z" fill="none" />
     </svg>
   );
 }
 
 export default function LoginPage() {
   return (
-    <div className="flex min-h-screen w-full items-center justify-center bg-background p-4">
-      <Card className="mx-auto w-full max-w-md">
+    <div className="flex min-h-screen w-full items-center justify-center bg-background p-4 transition-colors duration-300">
+      <Card className="mx-auto w-full max-w-md shadow-lg border">
         <CardHeader className="space-y-4 text-center">
           <div className="flex justify-center">
             <Logo />
           </div>
-          <CardTitle className="text-2xl">Welcome Back</CardTitle>
+          <CardTitle className="text-2xl font-bold tracking-tight">Access the Hub</CardTitle>
           <CardDescription>
-            Log in to access your dashboard and find your next opportunity.
+            Enter your credentials to access your intelligence profile.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -62,8 +61,9 @@ export default function LoginPage() {
               <Input
                 id="email"
                 type="email"
-                placeholder="m@example.com"
+                placeholder="name@example.com"
                 required
+                className="rounded-lg"
               />
             </div>
             <div className="grid gap-2">
@@ -71,31 +71,31 @@ export default function LoginPage() {
                 <Label htmlFor="password">Password</Label>
                 <Link
                   href="#"
-                  className="ml-auto inline-block text-sm underline"
+                  className="ml-auto inline-block text-xs underline text-muted-foreground hover:text-foreground"
                 >
-                  Forgot your password?
+                  Forgot password?
                 </Link>
               </div>
-              <Input id="password" type="password" required />
+              <Input id="password" type="password" required className="rounded-lg" />
             </div>
-            <Button type="submit" className="w-full" asChild>
-              <Link href="/dashboard">Log In</Link>
+            <Button type="submit" className="w-full rounded-lg font-semibold h-11" asChild>
+              <Link href="/dashboard">Continue to Dashboard</Link>
             </Button>
-            <div className="relative my-2">
+            <div className="relative my-4">
               <Separator />
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-2 bg-background text-sm text-muted-foreground">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-2 bg-card text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
                 OR
               </div>
             </div>
-            <Button variant="outline" className="w-full">
+            <Button variant="outline" className="w-full rounded-lg h-11">
               <GoogleIcon className="mr-2 h-4 w-4" />
-              Continue with Google
+              Sign in with Google
             </Button>
           </div>
-          <div className="mt-6 text-center text-sm">
-            Don&apos;t have an account?{' '}
-            <Link href="/signup" className="underline font-semibold">
-              Sign up
+          <div className="mt-8 text-center text-sm text-muted-foreground">
+            New to the network?{' '}
+            <Link href="/signup" className="underline font-bold text-foreground">
+              Create an account
             </Link>
           </div>
         </CardContent>
