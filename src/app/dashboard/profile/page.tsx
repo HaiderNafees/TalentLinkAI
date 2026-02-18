@@ -87,6 +87,7 @@ export default function ProfilePage() {
           
           const profileDoc = doc(db, 'freelancers', user.uid);
           setDoc(profileDoc, {
+            id: user.uid,
             profilePictureUrl: base64String,
             updatedDate: new Date().toISOString(),
           }, { merge: true })
@@ -122,6 +123,7 @@ export default function ProfilePage() {
     
     const skillsArray = formData.skills.split(',').map(s => s.trim()).filter(s => s !== '');
     const updateData = {
+      id: user.uid,
       firstName: formData.firstName,
       lastName: formData.lastName,
       headline: formData.headline,
@@ -135,12 +137,14 @@ export default function ProfilePage() {
     };
 
     const profileDoc = doc(db, 'freelancers', user.uid);
+    
     setDoc(profileDoc, updateData, { merge: true })
       .then(() => {
         toast({
           title: "Identity Synchronized",
           description: "Your professional data has been successfully persisted.",
         });
+        setIsSaving(false);
       })
       .catch((error) => {
         errorEmitter.emit('permission-error', new FirestorePermissionError({
@@ -148,8 +152,6 @@ export default function ProfilePage() {
           operation: 'update',
           requestResourceData: updateData,
         }));
-      })
-      .finally(() => {
         setIsSaving(false);
       });
   }
@@ -163,7 +165,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="space-y-10 max-w-4xl mx-auto pb-20">
+    <div className="space-y-10 max-w-4xl mx-auto pb-20 animate-in fade-in duration-500">
       <PageHeader
         title="Professional Identity"
         subtitle="Manage your visibility and technical profile data."
@@ -171,7 +173,7 @@ export default function ProfilePage() {
       
       <div className="grid lg:grid-cols-3 gap-8">
         <div className="lg:col-span-1 space-y-6">
-          <Card className="rounded-[32px] overflow-hidden border-none shadow-xl bg-card">
+          <Card className="rounded-[40px] overflow-hidden border-none shadow-2xl bg-card">
             <CardContent className="p-8 flex flex-col items-center text-center space-y-6">
               <div className="relative group">
                 <Avatar className="h-32 w-32 border-4 border-background shadow-2xl transition-all group-hover:opacity-90">
@@ -199,9 +201,9 @@ export default function ProfilePage() {
                 />
               </div>
               <div className="space-y-1">
-                <h3 className="text-xl font-bold">{formData.firstName} {formData.lastName}</h3>
-                <p className="text-indigo-600 font-medium text-sm">{formData.headline || 'Talent Member'}</p>
-                <div className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground mt-2">
+                <h3 className="text-xl font-bold tracking-tight">{formData.firstName} {formData.lastName}</h3>
+                <p className="text-indigo-600 font-semibold text-xs uppercase tracking-widest">{formData.headline || 'Talent Member'}</p>
+                <div className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground mt-2 font-medium">
                   <MapPin className="h-3.5 w-3.5" />
                   {formData.location || 'Location not set'}
                 </div>
@@ -209,138 +211,138 @@ export default function ProfilePage() {
             </CardContent>
           </Card>
 
-          <Card className="rounded-[32px] border-none shadow-sm bg-indigo-500/[0.03]">
+          <Card className="rounded-[40px] border-none shadow-sm bg-indigo-500/[0.03]">
              <CardHeader className="pb-2">
-                <CardTitle className="text-xs font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
-                  <Briefcase className="h-4 w-4" /> Visibility
+                <CardTitle className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground flex items-center gap-2">
+                  <Briefcase className="h-3.5 w-3.5" /> Network Status
                 </CardTitle>
              </CardHeader>
              <CardContent className="space-y-4">
                 <div className="flex justify-between items-center text-sm">
-                  <span className="text-muted-foreground">Hub Status</span>
-                  <span className="font-bold text-green-500">Visible</span>
+                  <span className="text-muted-foreground font-medium">Hub Visibility</span>
+                  <span className="font-bold text-green-500 bg-green-50 px-2 py-0.5 rounded-full text-[10px]">ACTIVE</span>
                 </div>
                 <div className="flex justify-between items-center text-sm">
-                  <span className="text-muted-foreground">Match Rating</span>
-                  <span className="font-bold">Elite</span>
+                  <span className="text-muted-foreground font-medium">Sync Quality</span>
+                  <span className="font-bold text-indigo-600">Premium</span>
                 </div>
              </CardContent>
           </Card>
         </div>
 
-        <Card className="lg:col-span-2 rounded-[32px] border-none shadow-xl overflow-hidden">
-          <CardHeader className="bg-indigo-500/[0.02] p-8 border-b">
-            <CardTitle className="text-lg">Core Profile Data</CardTitle>
-            <CardDescription>All changes are synchronized with the neural matching engine.</CardDescription>
+        <Card className="lg:col-span-2 rounded-[40px] border-none shadow-2xl overflow-hidden">
+          <CardHeader className="bg-indigo-500/[0.02] p-10 border-b border-indigo-100/20">
+            <CardTitle className="text-xl font-bold tracking-tight text-foreground">Core Profile Data</CardTitle>
+            <CardDescription className="text-sm font-medium">Securely persisted in the TalentLink cloud infrastructure.</CardDescription>
           </CardHeader>
-          <CardContent className="p-8 space-y-8">
-            <div className="grid md:grid-cols-2 gap-6">
+          <CardContent className="p-10 space-y-8">
+            <div className="grid md:grid-cols-2 gap-8">
               <div className="space-y-2">
-                <Label htmlFor="first" className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">First Name</Label>
+                <Label htmlFor="first" className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">First Name</Label>
                 <Input 
                   id="first" 
                   value={formData.firstName}
                   onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                  className="rounded-xl h-11" 
+                  className="rounded-2xl h-12 border-muted-foreground/20 focus:ring-indigo-500/20" 
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="last" className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Last Name</Label>
+                <Label htmlFor="last" className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">Last Name</Label>
                 <Input 
                   id="last" 
                   value={formData.lastName}
                   onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                  className="rounded-xl h-11" 
+                  className="rounded-2xl h-12 border-muted-foreground/20 focus:ring-indigo-500/20" 
                 />
               </div>
             </div>
             
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid md:grid-cols-2 gap-8">
                <div className="space-y-2">
-                  <Label htmlFor="headline" className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Professional Headline</Label>
+                  <Label htmlFor="headline" className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">Professional Headline</Label>
                   <Input 
                     id="headline" 
                     value={formData.headline}
                     onChange={(e) => setFormData({ ...formData, headline: e.target.value })}
                     placeholder="e.g. Lead Developer" 
-                    className="rounded-xl h-11" 
+                    className="rounded-2xl h-12 border-muted-foreground/20 focus:ring-indigo-500/20" 
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="loc" className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Location</Label>
+                  <Label htmlFor="loc" className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">Location</Label>
                   <Input 
                     id="loc" 
                     value={formData.location}
                     onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                     placeholder="City, Country" 
-                    className="rounded-xl h-11" 
+                    className="rounded-2xl h-12 border-muted-foreground/20 focus:ring-indigo-500/20" 
                   />
                 </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="skills" className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Skills (Comma Separated)</Label>
+              <Label htmlFor="skills" className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">Skills (Comma Separated)</Label>
               <Input 
                 id="skills" 
                 value={formData.skills}
                 onChange={(e) => setFormData({ ...formData, skills: e.target.value })}
                 placeholder="React, TypeScript, Node.js..." 
-                className="rounded-xl h-11" 
+                className="rounded-2xl h-12 border-muted-foreground/20 focus:ring-indigo-500/20" 
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="bio" className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Bio / Experience</Label>
+              <Label htmlFor="bio" className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">Bio / Experience Summary</Label>
               <Textarea
                 id="bio"
-                placeholder="Summarize your professional highlights..."
+                placeholder="Describe your professional journey..."
                 value={formData.bio}
                 onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
-                className="min-h-[160px] rounded-2xl pt-4"
+                className="min-h-[160px] rounded-[24px] pt-4 border-muted-foreground/20 focus:ring-indigo-500/20"
               />
             </div>
 
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-3 gap-8">
                <div className="space-y-2">
-                  <Label htmlFor="portfolio" className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-1.5"><Globe className="h-3 w-3" /> Website</Label>
+                  <Label htmlFor="portfolio" className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80 flex items-center gap-1.5"><Globe className="h-3 w-3" /> Website</Label>
                   <Input 
                     id="portfolio" 
                     value={formData.websiteUrl}
                     onChange={(e) => setFormData({ ...formData, websiteUrl: e.target.value })}
                     placeholder="https://..." 
-                    className="rounded-xl h-11" 
+                    className="rounded-2xl h-12 border-muted-foreground/20" 
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="li" className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">LinkedIn</Label>
+                  <Label htmlFor="li" className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">LinkedIn</Label>
                   <Input 
                     id="li" 
                     value={formData.linkedInUrl}
                     onChange={(e) => setFormData({ ...formData, linkedInUrl: e.target.value })}
                     placeholder="https://linkedin.com/in/..." 
-                    className="rounded-xl h-11" 
+                    className="rounded-2xl h-12 border-muted-foreground/20" 
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="rate" className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Hourly Rate ($)</Label>
+                  <Label htmlFor="rate" className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">Hourly Rate ($)</Label>
                   <Input 
                     id="rate" 
                     type="number"
                     value={formData.hourlyRate}
                     onChange={(e) => setFormData({ ...formData, hourlyRate: e.target.value })}
                     placeholder="0" 
-                    className="rounded-xl h-11" 
+                    className="rounded-2xl h-12 border-muted-foreground/20" 
                   />
                 </div>
             </div>
 
-            <div className="pt-6 flex justify-end">
+            <div className="pt-8 flex justify-end">
               <Button 
                 onClick={handleSave} 
                 disabled={isSaving}
-                className="rounded-full h-12 px-12 font-bold bg-indigo-600 hover:bg-indigo-700 shadow-xl shadow-indigo-500/20"
+                className="rounded-full h-14 px-12 font-extrabold text-base bg-indigo-600 hover:bg-indigo-700 shadow-2xl shadow-indigo-500/30 transition-all hover:scale-[1.02] active:scale-[0.98]"
               >
-                {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
+                {isSaving ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Save className="mr-2 h-5 w-5" />}
                 Persist Profile Changes
               </Button>
             </div>
