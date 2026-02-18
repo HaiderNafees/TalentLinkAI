@@ -9,6 +9,7 @@ import {
   Bell,
   LogOut,
   Settings,
+  Search,
 } from 'lucide-react';
 
 import {
@@ -42,10 +43,10 @@ import {
 import { freelancerProfile } from '@/lib/data';
 
 const navItems = [
-  { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-  { href: '/dashboard/profile', icon: User, label: 'My Profile' },
-  { href: '/dashboard/messages', icon: MessageSquare, label: 'Messages' },
-  { href: '/dashboard/notifications', icon: Bell, label: 'Notifications' },
+  { href: '/dashboard', icon: LayoutDashboard, label: 'Overview' },
+  { href: '/dashboard/profile', icon: User, label: 'My Identity' },
+  { href: '/dashboard/messages', icon: MessageSquare, label: 'Secure Inbox' },
+  { href: '/dashboard/notifications', icon: Bell, label: 'Intel Feed' },
 ];
 
 export default function DashboardLayout({
@@ -57,23 +58,18 @@ export default function DashboardLayout({
 
   return (
     <SidebarProvider>
-      <Sidebar side="left" variant="sidebar" collapsible="icon">
-        <SidebarHeader className="h-20 p-4">
-          <div className="flex items-center gap-2 [&>span]:hidden group-data-[state=expanded]:[&>span]:inline">
-            <Logo />
-          </div>
+      <Sidebar side="left" variant="sidebar" collapsible="icon" className="border-r">
+        <SidebarHeader className="h-16 flex items-center px-4 border-b">
+          <Logo />
         </SidebarHeader>
-        <SidebarContent>
-          <SidebarMenu>
+        <SidebarContent className="py-6">
+          <SidebarMenu className="px-2 space-y-1">
             {navItems.map((item) => (
               <SidebarMenuItem key={item.href}>
                 <SidebarMenuButton
                   asChild
                   isActive={pathname === item.href}
-                  tooltip={{
-                    children: item.label,
-                    className: 'bg-sidebar-background text-sidebar-foreground',
-                  }}
+                  className="rounded-lg font-medium"
                 >
                   <Link href={item.href}>
                     <item.icon />
@@ -84,19 +80,13 @@ export default function DashboardLayout({
             ))}
           </SidebarMenu>
         </SidebarContent>
-        <SidebarFooter className="p-4">
+        <SidebarFooter className="p-4 border-t">
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton
-                asChild
-                tooltip={{
-                  children: 'Log Out',
-                  className: 'bg-sidebar-background text-sidebar-foreground',
-                }}
-              >
+              <SidebarMenuButton asChild className="text-muted-foreground hover:text-destructive transition-colors">
                 <Link href="/">
                   <LogOut />
-                  <span>Log Out</span>
+                  <span>Exit Dashboard</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -104,65 +94,66 @@ export default function DashboardLayout({
         </SidebarFooter>
       </Sidebar>
       <SidebarInset>
-        <header className="sticky top-0 z-10 flex h-20 items-center justify-between border-b bg-background/80 px-4 backdrop-blur-sm sm:px-6 lg:px-8">
-          <div className="flex items-center gap-2">
-            <SidebarTrigger className="md:hidden" />
-          </div>
+        <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b bg-background/80 px-4 backdrop-blur-sm sm:px-8">
           <div className="flex items-center gap-4">
+            <SidebarTrigger className="md:hidden" />
+            <div className="hidden md:flex items-center gap-2 text-xs font-bold text-muted-foreground bg-muted px-3 py-1 rounded-full uppercase tracking-tighter">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+              Live AI Matchmaking Active
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="hidden sm:flex items-center bg-muted rounded-full px-3 py-1.5 border w-64 group focus-within:ring-1 focus-within:ring-primary transition-all">
+              <Search className="h-3.5 w-3.5 text-muted-foreground" />
+              <input 
+                placeholder="Search global intel..." 
+                className="bg-transparent border-none outline-none text-xs ml-2 w-full placeholder:text-muted-foreground/60"
+              />
+            </div>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  asChild
-                >
+                <Button variant="ghost" size="icon" asChild className="rounded-full h-9 w-9">
                   <Link href="/dashboard/notifications">
-                    <Bell className="h-5 w-5" />
-                    <span className="sr-only">Notifications</span>
+                    <Bell className="h-4 w-4" />
                   </Link>
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Notifications</p>
+                <p>Alerts</p>
               </TooltipContent>
             </Tooltip>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="relative h-10 w-10 rounded-full"
+                  className="relative h-9 w-9 rounded-full overflow-hidden border p-0"
                 >
-                  <Avatar>
-                    <AvatarImage
-                      src={freelancerProfile.avatarUrl}
-                      data-ai-hint="person avatar"
-                    />
+                  <Avatar className="h-full w-full">
+                    <AvatarImage src={freelancerProfile.avatarUrl} />
                     <AvatarFallback>JD</AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>
-                  <p>{freelancerProfile.name}</p>
-                  <p className="text-xs font-normal text-muted-foreground">
-                    {freelancerProfile.email}
-                  </p>
+              <DropdownMenuContent align="end" className="w-56 mt-2 rounded-xl">
+                <DropdownMenuLabel className="font-normal p-4">
+                  <p className="font-bold text-sm">{freelancerProfile.name}</p>
+                  <p className="text-xs text-muted-foreground truncate">{freelancerProfile.email}</p>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link href="/dashboard/profile">
-                    <User className="mr-2" />
-                    <span>Profile</span>
+                <DropdownMenuItem asChild className="cursor-pointer">
+                  <Link href="/dashboard/profile" className="flex items-center w-full">
+                    <User className="mr-2 h-4 w-4" />
+                    <span>My Profile</span>
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Settings className="mr-2" />
+                <DropdownMenuItem className="cursor-pointer">
+                  <Settings className="mr-2 h-4 w-4" />
                   <span>Settings</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                   <Link href="/">
-                    <LogOut className="mr-2" />
+                <DropdownMenuItem asChild className="cursor-pointer text-destructive focus:text-destructive">
+                   <Link href="/" className="flex items-center w-full">
+                    <LogOut className="mr-2 h-4 w-4" />
                     <span>Log out</span>
                    </Link>
                 </DropdownMenuItem>
@@ -170,7 +161,7 @@ export default function DashboardLayout({
             </DropdownMenu>
           </div>
         </header>
-        <main className="flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
+        <main className="flex-1 p-6 sm:p-10 bg-background/50">{children}</main>
       </SidebarInset>
     </SidebarProvider>
   );

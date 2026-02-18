@@ -1,68 +1,67 @@
 import Link from 'next/link';
-import { Twitter, Linkedin, Facebook, Send } from 'lucide-react';
+import { Twitter, Linkedin, Facebook, Send, Command } from 'lucide-react';
 import Logo from './logo';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 
 const footerLinks = {
   platform: [
-    { label: 'Find a Job', href: '/dashboard' },
-    { label: 'Post a Job', href: '#' },
-    { label: 'How it Works', href: '#' },
-    { label: 'Why Outlier', href: '#' },
+    { label: 'Talent Network', href: '/dashboard' },
+    { label: 'Post a Gig', href: '#' },
+    { label: 'AI Ideator', href: '#' },
+    { label: 'Skill Verification', href: '#' },
   ],
   company: [
-    { label: 'About Us', href: '#' },
-    { label: 'Blog', href: '#' },
+    { label: 'Our Mission', href: '#' },
+    { label: 'Intelligence Blog', href: '#' },
     { label: 'Careers', href: '#' },
-    { label: 'Contact Us', href: '#' },
+    { label: 'Contact', href: '#' },
   ],
   legal: [
-    { label: 'Privacy Policy', href: '#' },
-    { label: 'Terms of Service', href: '#' },
-    { label: 'Trust & Safety', href: '#' },
+    { label: 'Privacy', href: '#' },
+    { label: 'Terms', href: '#' },
+    { label: 'Compliance', href: '#' },
   ],
 };
 
 const socialLinks = [
-  { icon: <Twitter />, href: '#', 'aria-label': 'Twitter' },
-  { icon: <Linkedin />, href: '#', 'aria-label': 'LinkedIn' },
-  { icon: <Facebook />, href: '#', 'aria-label': 'Facebook' },
+  { icon: <Twitter className="h-4 w-4" />, href: '#', 'aria-label': 'Twitter' },
+  { icon: <Linkedin className="h-4 w-4" />, href: '#', 'aria-label': 'LinkedIn' },
+  { icon: <Facebook className="h-4 w-4" />, href: '#', 'aria-label': 'Facebook' },
 ];
 
 export default function Footer() {
   return (
-    <footer className="bg-sidebar text-sidebar-foreground">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-8">
-          <div className="col-span-2 md:col-span-2">
+    <footer className="border-t bg-card text-card-foreground">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+        <div className="grid grid-cols-2 md:grid-cols-12 gap-12">
+          <div className="col-span-2 md:col-span-4 space-y-6">
             <Logo />
-            <p className="mt-4 text-sm text-sidebar-foreground/70 max-w-xs">
-              AI-powered matching for the world's top freelance talent.
+            <p className="text-sm text-muted-foreground leading-relaxed max-w-sm">
+              The intelligent hub for the next generation of global talent. We use neural matching to connect elite freelancers with visionary companies.
             </p>
-            <div className="flex space-x-4 mt-6">
+            <div className="flex space-x-4">
               {socialLinks.map((link, index) => (
                 <Link
                   key={index}
                   href={link.href}
                   aria-label={link['aria-label']}
-                  className="text-sidebar-foreground/70 hover:text-sidebar-foreground transition-colors"
+                  className="p-2 rounded-full bg-secondary text-muted-foreground hover:bg-primary hover:text-primary-foreground transition-all duration-300"
                 >
                   {link.icon}
                 </Link>
               ))}
             </div>
           </div>
-          <div>
-            <h3 className="font-semibold text-sidebar-primary tracking-wider">
-              Platform
-            </h3>
-            <ul className="mt-4 space-y-3">
+          
+          <div className="col-span-1 md:col-span-2">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-foreground">Platform</h3>
+            <ul className="mt-6 space-y-4">
               {footerLinks.platform.map((link) => (
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    className="text-sm text-sidebar-foreground/70 hover:text-sidebar-foreground transition-colors"
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -70,16 +69,15 @@ export default function Footer() {
               ))}
             </ul>
           </div>
-          <div>
-            <h3 className="font-semibold text-sidebar-primary tracking-wider">
-              Company
-            </h3>
-            <ul className="mt-4 space-y-3">
+          
+          <div className="col-span-1 md:col-span-2">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-foreground">Company</h3>
+            <ul className="mt-6 space-y-4">
               {footerLinks.company.map((link) => (
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    className="text-sm text-sidebar-foreground/70 hover:text-sidebar-foreground transition-colors"
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -87,41 +85,20 @@ export default function Footer() {
               ))}
             </ul>
           </div>
-          <div>
-            <h3 className="font-semibold text-sidebar-primary tracking-wider">
-              Legal
-            </h3>
-            <ul className="mt-4 space-y-3">
-              {footerLinks.legal.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-sidebar-foreground/70 hover:text-sidebar-foreground transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="col-span-2 md:col-span-1">
-            <h3 className="font-semibold text-sidebar-primary tracking-wider">
-              Stay up to date
-            </h3>
-            <p className="mt-4 text-sm text-sidebar-foreground/70">
-              Join our newsletter for the latest job opportunities and news.
-            </p>
-            <form className="mt-4 flex gap-2">
+          
+          <div className="col-span-2 md:col-span-4 space-y-6">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-foreground">Newsletter</h3>
+            <p className="text-sm text-muted-foreground">Get the latest AI matching insights and high-value project alerts.</p>
+            <form className="flex gap-2">
               <Input
                 type="email"
-                placeholder="Enter your email"
-                className="bg-sidebar-border border-sidebar-border text-sidebar-foreground placeholder:text-sidebar-foreground/50 focus-visible:ring-sidebar-ring"
+                placeholder="Email address"
+                className="rounded-full bg-secondary border-none focus-visible:ring-1 focus-visible:ring-primary"
               />
               <Button
                 type="submit"
                 size="icon"
-                variant="default"
-                className="bg-primary hover:bg-primary/90"
+                className="rounded-full shrink-0 shadow-lg shadow-primary/20"
               >
                 <Send className="h-4 w-4" />
                 <span className="sr-only">Subscribe</span>
@@ -130,12 +107,16 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <div className="border-t border-sidebar-border/50">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-sm text-sidebar-foreground/50">
-          <p>
-            &copy; {new Date().getFullYear()} Freelance Outlier. All rights
-            reserved.
-          </p>
+      <div className="border-t bg-muted/50">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
+          <p>© {new Date().getFullYear()} TalentLink AI. All rights reserved.</p>
+          <div className="flex gap-6">
+            {footerLinks.legal.map((link) => (
+              <Link key={link.label} href={link.href} className="hover:text-primary transition-colors">
+                {link.label}
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
     </footer>
