@@ -67,14 +67,14 @@ export default function ProfilePage() {
       }, { merge: true });
 
       toast({
-        title: "Sync Successful",
-        description: "Your Neural Profile has been updated in the cloud.",
+        title: "Profile Updated",
+        description: "Your information has been successfully synced.",
       });
     } catch (e) {
       toast({
         variant: "destructive",
-        title: "Sync Error",
-        description: "Failed to update profile context.",
+        title: "Update Failed",
+        description: "Could not save profile changes.",
       });
     } finally {
       setIsSaving(false);
@@ -92,22 +92,25 @@ export default function ProfilePage() {
   return (
     <div className="space-y-8 max-w-4xl mx-auto pb-20">
       <PageHeader
-        title="Intelligence Identity"
-        subtitle="Calibrate your core profile to maintain precision matching."
+        title="Professional Identity"
+        subtitle="Manage your profile information for accurate project matching."
       />
       
       <Card className="rounded-[40px] border-none shadow-xl overflow-hidden">
         <CardHeader className="bg-indigo-500/5 p-8 border-b">
           <div className="flex items-center gap-6">
             <Avatar className="h-24 w-24 border-4 border-background shadow-lg">
-              <AvatarImage src={user?.photoURL || ''} />
-              <AvatarFallback className="bg-indigo-600 text-white text-3xl font-bold">
-                {formData.firstName?.[0] || <User />}
-              </AvatarFallback>
+              {user?.photoURL ? (
+                <AvatarImage src={user.photoURL} alt={formData.firstName || 'User'} />
+              ) : (
+                <AvatarFallback className="bg-indigo-600 text-white text-3xl font-bold">
+                  {formData.firstName?.[0] || <User className="h-10 w-10" />}
+                </AvatarFallback>
+              )}
             </Avatar>
             <div className="space-y-1">
               <CardTitle className="text-2xl font-bold">{formData.firstName} {formData.lastName}</CardTitle>
-              <CardDescription className="text-indigo-600 font-medium">{formData.title || 'Elite Professional'}</CardDescription>
+              <CardDescription className="text-indigo-600 font-medium">{formData.title || 'Expert Professional'}</CardDescription>
             </div>
           </div>
         </CardHeader>
@@ -139,30 +142,27 @@ export default function ProfilePage() {
               id="headline" 
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              placeholder="e.g. Senior Generative UI Engineer" 
+              placeholder="e.g. Senior Full-Stack Engineer" 
               className="rounded-xl h-12" 
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="skills" className="text-xs font-bold uppercase tracking-widest opacity-70">Capabilities (Comma Separated)</Label>
+            <Label htmlFor="skills" className="text-xs font-bold uppercase tracking-widest opacity-70">Skills (Comma Separated)</Label>
             <Textarea
               id="skills"
-              placeholder="React, Next.js, AI, etc."
+              placeholder="React, Next.js, TypeScript, etc."
               value={formData.skills}
               onChange={(e) => setFormData({ ...formData, skills: e.target.value })}
               className="min-h-[80px] rounded-2xl pt-4"
             />
-            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
-              AI uses these tokens to rank you in the global feed.
-            </p>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="experience" className="text-xs font-bold uppercase tracking-widest opacity-70">Neural Experience Summary</Label>
+            <Label htmlFor="experience" className="text-xs font-bold uppercase tracking-widest opacity-70">Experience Summary</Label>
             <Textarea
               id="experience"
-              placeholder="Summarize your professional journey..."
+              placeholder="Tell potential clients about your background..."
               value={formData.experience}
               onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
               className="min-h-[200px] rounded-2xl pt-4"
@@ -170,7 +170,7 @@ export default function ProfilePage() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="portfolio" className="text-xs font-bold uppercase tracking-widest opacity-70">External Hub URL (Portfolio/Website)</Label>
+            <Label htmlFor="portfolio" className="text-xs font-bold uppercase tracking-widest opacity-70">Portfolio / Website URL</Label>
             <Input 
               id="portfolio" 
               value={formData.websiteUrl}

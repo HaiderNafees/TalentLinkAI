@@ -41,9 +41,9 @@ import { Button } from '@/components/ui/button';
 import {
   Tooltip,
   TooltipContent,
+  TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { freelancerProfile } from '@/lib/data';
 import { useUser, useAuth } from '@/firebase';
 import { signOut } from 'firebase/auth';
 
@@ -127,7 +127,7 @@ export default function DashboardLayout({
             <SidebarTrigger className="md:hidden" />
             <div className="hidden md:flex items-center gap-2 text-[10px] font-bold text-muted-foreground bg-secondary px-2.5 py-1 rounded-full uppercase tracking-widest border">
               <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
-              Neural Matching Active
+              Intelligence Sync Active
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -138,27 +138,34 @@ export default function DashboardLayout({
                 className="bg-transparent border-none outline-none text-xs ml-2 w-full"
               />
             </div>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" asChild className="rounded-full h-9 w-9">
-                  <Link href="/dashboard/notifications">
-                    <Bell className="h-4 w-4" />
-                  </Link>
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Alerts</p>
-              </TooltipContent>
-            </Tooltip>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="ghost" size="icon" asChild className="rounded-full h-9 w-9">
+                    <Link href="/dashboard/notifications">
+                      <Bell className="h-4 w-4" />
+                    </Link>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Alerts</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="relative h-9 w-9 rounded-full border p-0"
+                  className="relative h-9 w-9 rounded-full border p-0 overflow-hidden"
                 >
                   <Avatar className="h-full w-full">
-                    <AvatarImage src={user?.photoURL || freelancerProfile.avatarUrl} />
-                    <AvatarFallback>{user?.displayName?.charAt(0) || 'U'}</AvatarFallback>
+                    {user?.photoURL ? (
+                      <AvatarImage src={user.photoURL} alt={user.displayName || 'User'} />
+                    ) : (
+                      <AvatarFallback className="bg-indigo-600 text-white text-[10px] font-bold">
+                        {user?.displayName?.charAt(0) || <User className="h-4 w-4" />}
+                      </AvatarFallback>
+                    )}
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
