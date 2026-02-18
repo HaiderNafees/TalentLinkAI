@@ -108,6 +108,7 @@ export default function DashboardPage() {
     runMatching();
   }, [profile, rawJobs]);
 
+  // Priority: Wait for user and profile fetch to complete
   if (isUserLoading || isProfileLoading) {
     return (
       <div className="flex h-[80vh] items-center justify-center">
@@ -116,6 +117,7 @@ export default function DashboardPage() {
     );
   }
 
+  // Only show wizard if fetch is finished and no profile found
   if (!profile) {
     return <OnboardingWizard onComplete={() => window.location.reload()} />;
   }

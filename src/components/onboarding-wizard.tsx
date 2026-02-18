@@ -67,13 +67,13 @@ export function OnboardingWizard({ onComplete }: { onComplete: () => void }) {
     try {
       const skillsArray = formData.skills.split(',').map(s => s.trim()).filter(s => s !== '');
       
-      // 1. Update Firebase Auth Profile (Sync)
+      // 1. Update Firebase Auth Profile
       await updateProfile(user, { 
         displayName: `${formData.firstName} ${formData.lastName}`,
         photoURL: formData.photoURL || null
       });
 
-      // 2. Update Firestore Profile (Non-blocking as per guidelines)
+      // 2. Update Firestore Profile
       const profileData = {
         id: user.uid,
         email: user.email || '',
@@ -90,14 +90,8 @@ export function OnboardingWizard({ onComplete }: { onComplete: () => void }) {
       };
 
       const docRef = doc(db, 'freelancers', user.uid);
-      setDoc(docRef, profileData, { merge: true })
-        .catch(async (error) => {
-          errorEmitter.emit('permission-error', new FirestorePermissionError({
-            path: docRef.path,
-            operation: 'create',
-            requestResourceData: profileData,
-          }));
-        });
+      // We await this specific write to ensure the profile exists before reloading
+      await setDoc(docRef, profileData, { merge: true });
 
       onComplete();
     } catch (e: any) {
@@ -106,7 +100,6 @@ export function OnboardingWizard({ onComplete }: { onComplete: () => void }) {
         title: "Setup Failed",
         description: e.message || "Could not finalize your profile.",
       });
-    } finally {
       setLoading(false);
     }
   };
