@@ -5,12 +5,14 @@ interface PageHeaderProps {
 
 export default function PageHeader({ title, subtitle }: PageHeaderProps) {
   return (
-    <div>
-      <h1 className="text-3xl font-bold tracking-tight text-foreground font-headline">
+    <div className="space-y-1.5">
+      <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-foreground leading-tight">
         {title}
       </h1>
       {subtitle && (
-        <p className="mt-1 text-muted-foreground">{subtitle}</p>
+        <p className="text-base text-muted-foreground font-medium max-w-2xl leading-relaxed">
+          {subtitle}
+        </p>
       )}
     </div>
   );
