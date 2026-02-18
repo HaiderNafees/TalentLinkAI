@@ -10,11 +10,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { User, Sparkles, ArrowRight, CheckCircle2, Loader2, Camera } from 'lucide-react';
+import { User, Sparkles, ArrowRight, CheckCircle2, Loader2, Camera, Briefcase } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
-import { errorEmitter } from '@/firebase/error-emitter';
-import { FirestorePermissionError } from '@/firebase/errors';
 
 export function OnboardingWizard({ onComplete }: { onComplete: () => void }) {
   const [step, setStep] = useState(1);
@@ -67,13 +65,11 @@ export function OnboardingWizard({ onComplete }: { onComplete: () => void }) {
     try {
       const skillsArray = formData.skills.split(',').map(s => s.trim()).filter(s => s !== '');
       
-      // 1. Update Firebase Auth Profile
       await updateProfile(user, { 
         displayName: `${formData.firstName} ${formData.lastName}`,
         photoURL: formData.photoURL || null
       });
 
-      // 2. Update Firestore Profile
       const profileData = {
         id: user.uid,
         email: user.email || '',
@@ -90,7 +86,6 @@ export function OnboardingWizard({ onComplete }: { onComplete: () => void }) {
       };
 
       const docRef = doc(db, 'freelancers', user.uid);
-      // We await this specific write to ensure the profile exists before reloading
       await setDoc(docRef, profileData, { merge: true });
 
       onComplete();
@@ -98,7 +93,7 @@ export function OnboardingWizard({ onComplete }: { onComplete: () => void }) {
       toast({
         variant: "destructive",
         title: "Setup Failed",
-        description: e.message || "Could not finalize your profile.",
+        description: e.message || "Could not finalize your professional profile.",
       });
       setLoading(false);
     }
@@ -106,56 +101,56 @@ export function OnboardingWizard({ onComplete }: { onComplete: () => void }) {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4 relative overflow-hidden">
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/5 blur-[120px] rounded-full" />
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-500/5 blur-[120px] rounded-full" />
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-indigo-500/[0.03] blur-[120px] rounded-full" />
+      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-purple-500/[0.03] blur-[120px] rounded-full" />
 
-      <Card className="w-full max-w-2xl border-none shadow-2xl rounded-[40px] overflow-hidden relative z-10">
+      <Card className="w-full max-w-2xl border border-border shadow-2xl rounded-[40px] overflow-hidden relative z-10 bg-card/80 backdrop-blur-xl">
         <div className="flex h-1.5 bg-secondary">
           {[1, 2, 3].map((i) => (
             <div
               key={i}
               className={cn(
-                "h-full transition-all duration-500 flex-1",
+                "h-full transition-all duration-700 flex-1",
                 step >= i ? "bg-indigo-600" : "bg-transparent"
               )}
             />
           ))}
         </div>
 
-        <CardHeader className="p-10 pb-4 text-center sm:text-left">
-          <div className="flex items-center justify-center sm:justify-start gap-2 mb-6">
-            <div className="h-10 w-10 bg-indigo-600 rounded-2xl flex items-center justify-center text-white">
-              <User className="h-5 w-5" />
+        <CardHeader className="p-10 pb-4">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="h-10 w-10 bg-indigo-600 text-white rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
+              <Briefcase className="h-5 w-5" />
             </div>
-            <span className="text-xs font-bold uppercase tracking-widest text-indigo-600">Onboarding Protocol</span>
+            <span className="text-xs font-bold uppercase tracking-widest text-indigo-600">Professional Onboarding</span>
           </div>
           
           {step === 1 && (
             <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
-              <CardTitle className="text-3xl font-bold tracking-tight mb-2">Basic Identity</CardTitle>
-              <CardDescription className="text-base">Let's set up the core of your professional profile.</CardDescription>
+              <CardTitle className="text-3xl font-extrabold tracking-tight mb-2">Identity Setup</CardTitle>
+              <CardDescription className="text-base">Establish your professional presence in the network.</CardDescription>
             </div>
           )}
           {step === 2 && (
             <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
-              <CardTitle className="text-3xl font-bold tracking-tight mb-2">Professional Depth</CardTitle>
-              <CardDescription className="text-base">Tell us about your skills and where you are located.</CardDescription>
+              <CardTitle className="text-3xl font-extrabold tracking-tight mb-2">Technical Depth</CardTitle>
+              <CardDescription className="text-base">Highlight your specialized skills and professional experience.</CardDescription>
             </div>
           )}
           {step === 3 && (
             <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
-              <CardTitle className="text-3xl font-bold tracking-tight mb-2">Ready to Launch</CardTitle>
-              <CardDescription className="text-base">Your identity is being synchronized with the global network.</CardDescription>
+              <CardTitle className="text-3xl font-extrabold tracking-tight mb-2">Account Ready</CardTitle>
+              <CardDescription className="text-base">Your professional identity has been successfully initialized.</CardDescription>
             </div>
           )}
         </CardHeader>
 
         <CardContent className="p-10 pt-4">
           {step === 1 && (
-            <div className="space-y-6">
-              <div className="flex flex-col items-center gap-4 mb-4">
+            <div className="space-y-8">
+              <div className="flex flex-col items-center gap-4">
                 <div className="relative group cursor-pointer" onClick={handleImageClick}>
-                  <Avatar className="h-28 w-28 border-4 border-indigo-50 shadow-xl transition-all group-hover:opacity-80">
+                  <Avatar className="h-32 w-32 border-4 border-background shadow-2xl transition-all group-hover:opacity-80">
                     {formData.photoURL ? (
                       <AvatarImage src={formData.photoURL} />
                     ) : (
@@ -164,11 +159,11 @@ export function OnboardingWizard({ onComplete }: { onComplete: () => void }) {
                       </AvatarFallback>
                     )}
                   </Avatar>
-                  <div className="absolute bottom-1 right-1 p-2 bg-indigo-600 rounded-full text-white shadow-lg border-2 border-white">
+                  <div className="absolute bottom-1 right-1 p-2 bg-indigo-600 rounded-full text-white shadow-lg border-2 border-background">
                     {isUploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Camera className="h-4 w-4" />}
                   </div>
                 </div>
-                <Label className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">Upload Avatar</Label>
+                <Label className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">Professional Photo</Label>
                 <input 
                   type="file" 
                   ref={fileInputRef} 
@@ -178,14 +173,14 @@ export function OnboardingWizard({ onComplete }: { onComplete: () => void }) {
                 />
               </div>
 
-              <div className="grid sm:grid-cols-2 gap-4">
+              <div className="grid sm:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label htmlFor="first" className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">First Name</Label>
                   <Input 
                     id="first" 
                     value={formData.firstName}
                     onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                    className="rounded-xl h-12" 
+                    className="rounded-2xl h-12 border-muted-foreground/20 focus:border-indigo-600" 
                   />
                 </div>
                 <div className="space-y-2">
@@ -194,7 +189,7 @@ export function OnboardingWizard({ onComplete }: { onComplete: () => void }) {
                     id="last" 
                     value={formData.lastName}
                     onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                    className="rounded-xl h-12" 
+                    className="rounded-2xl h-12 border-muted-foreground/20 focus:border-indigo-600" 
                   />
                 </div>
               </div>
@@ -204,31 +199,31 @@ export function OnboardingWizard({ onComplete }: { onComplete: () => void }) {
                   id="headline" 
                   value={formData.headline}
                   onChange={(e) => setFormData({ ...formData, headline: e.target.value })}
-                  placeholder="e.g. Senior Product Designer" 
-                  className="rounded-xl h-12" 
+                  placeholder="e.g. Senior Software Architect" 
+                  className="rounded-2xl h-12 border-muted-foreground/20 focus:border-indigo-600" 
                 />
               </div>
               <Button 
                 onClick={() => setStep(2)} 
-                disabled={!formData.firstName || !formData.lastName}
-                className="w-full h-12 rounded-full font-bold bg-indigo-600 hover:bg-indigo-700 mt-4 group shadow-lg shadow-indigo-500/20"
+                disabled={!formData.firstName || !formData.lastName || !formData.headline}
+                className="w-full h-14 rounded-full font-bold bg-indigo-600 hover:bg-indigo-700 mt-4 group shadow-xl shadow-indigo-500/20 transition-all"
               >
-                Continue Setup <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                Continue Setup <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
               </Button>
             </div>
           )}
 
           {step === 2 && (
-            <div className="space-y-6">
-               <div className="grid sm:grid-cols-2 gap-4">
+            <div className="space-y-8">
+               <div className="grid sm:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="loc" className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Location</Label>
+                  <Label htmlFor="loc" className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Primary Location</Label>
                   <Input 
                     id="loc" 
                     value={formData.location}
                     onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                    placeholder="e.g. London, UK"
-                    className="rounded-xl h-12" 
+                    placeholder="e.g. Remote / London, UK"
+                    className="rounded-2xl h-12 border-muted-foreground/20 focus:border-indigo-600" 
                   />
                 </div>
                 <div className="space-y-2">
@@ -237,52 +232,52 @@ export function OnboardingWizard({ onComplete }: { onComplete: () => void }) {
                     id="skills" 
                     value={formData.skills}
                     onChange={(e) => setFormData({ ...formData, skills: e.target.value })}
-                    placeholder="React, UI, UX..." 
-                    className="rounded-xl h-12" 
+                    placeholder="e.g. React, Python, Cloud Arch" 
+                    className="rounded-2xl h-12 border-muted-foreground/20 focus:border-indigo-600" 
                   />
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="bio" className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Short Bio / Experience</Label>
+                <Label htmlFor="bio" className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Professional Summary</Label>
                 <Textarea 
                   id="bio" 
                   value={formData.bio}
                   onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
-                  placeholder="Briefly describe your professional background..." 
-                  className="rounded-2xl min-h-[150px] pt-4" 
+                  placeholder="Summarize your professional accomplishments and career goals..." 
+                  className="rounded-3xl min-h-[180px] pt-4 border-muted-foreground/20 focus:border-indigo-600" 
                 />
               </div>
               <div className="flex gap-4 mt-4">
-                <Button variant="ghost" onClick={() => setStep(1)} className="rounded-full px-8">Back</Button>
+                <Button variant="ghost" onClick={() => setStep(1)} className="rounded-full px-10 h-12">Back</Button>
                 <Button 
                   onClick={() => setStep(3)} 
                   disabled={!formData.skills || !formData.bio}
-                  className="flex-1 h-12 rounded-full font-bold bg-indigo-600 hover:bg-indigo-700 group shadow-lg shadow-indigo-500/20"
+                  className="flex-1 h-14 rounded-full font-bold bg-indigo-600 hover:bg-indigo-700 group shadow-xl shadow-indigo-500/20 transition-all"
                 >
-                  Finalize Identity <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  Finalize Identity <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </Button>
               </div>
             </div>
           )}
 
           {step === 3 && (
-            <div className="space-y-8 text-center py-4">
-              <div className="relative mx-auto h-24 w-24">
+            <div className="space-y-10 text-center py-6">
+              <div className="relative mx-auto h-28 w-28">
                 <div className="absolute inset-0 bg-green-500/10 rounded-full animate-ping" />
-                <div className="relative h-24 w-24 bg-green-500 rounded-full flex items-center justify-center text-white shadow-2xl">
-                  <CheckCircle2 className="h-12 w-12" />
+                <div className="relative h-28 w-28 bg-green-500 rounded-full flex items-center justify-center text-white shadow-2xl">
+                  <CheckCircle2 className="h-14 w-14" />
                 </div>
               </div>
-              <div className="space-y-4 max-w-sm mx-auto">
-                <p className="text-xl font-bold tracking-tight">Identity Synced</p>
-                <p className="text-muted-foreground">Your profile is now live. TalentLink AI is analyzing current opportunities for your specific skill set.</p>
+              <div className="space-y-3 max-w-sm mx-auto">
+                <p className="text-2xl font-extrabold tracking-tight">Identity Synchronized</p>
+                <p className="text-muted-foreground leading-relaxed">Your professional hub is ready. You can now access tailored opportunities and AI-powered gig insights.</p>
               </div>
               <Button 
                 onClick={handleComplete} 
                 disabled={loading}
-                className="w-full h-14 rounded-full font-bold text-lg bg-indigo-600 hover:bg-indigo-700 shadow-2xl shadow-indigo-500/10"
+                className="w-full h-16 rounded-full font-extrabold text-lg bg-indigo-600 hover:bg-indigo-700 shadow-2xl shadow-indigo-500/30 transition-all"
               >
-                {loading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Sparkles className="mr-2 h-5 w-5" />}
+                {loading ? <Loader2 className="mr-2 h-6 w-6 animate-spin" /> : <Sparkles className="mr-2 h-6 w-6" />}
                 Enter Hub
               </Button>
             </div>

@@ -6,14 +6,12 @@ import { collection, doc, setDoc } from 'firebase/firestore';
 import JobCard from '@/components/job-card';
 import PageHeader from '@/components/page-header';
 import { Input } from '@/components/ui/input';
-import { Search, Sparkles, Brain, TrendingUp, Loader2, Database } from 'lucide-react';
+import { Search, Sparkles, Brain, TrendingUp, Loader2, Database, Briefcase } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getJobMatch } from '@/lib/actions';
 import { OnboardingWizard } from '@/components/onboarding-wizard';
 import { useDoc } from '@/firebase';
-import { errorEmitter } from '@/firebase/error-emitter';
-import { FirestorePermissionError } from '@/firebase/errors';
 
 export default function DashboardPage() {
   const { user, isUserLoading } = useUser();
@@ -22,18 +20,15 @@ export default function DashboardPage() {
   const [matchedJobs, setMatchedJobs] = useState<any[]>([]);
   const [isMatching, setIsMatching] = useState(false);
 
-  // Memoize profile reference
   const profileRef = useMemoFirebase(() => (user ? doc(db, 'freelancers', user.uid) : null), [db, user]);
   const { data: profile, isLoading: isProfileLoading } = useDoc(profileRef);
 
-  // Memoize jobs query
   const jobsQuery = useMemoFirebase(() => collection(db, 'jobPostings'), [db]);
   const { data: rawJobs, isLoading: isJobsLoading } = useCollection(jobsQuery);
 
   const handleSeedData = () => {
     if (!db || !user) return;
     
-    // We add clientId to match security rules for demo purposes
     const sampleJobs = [
       {
         id: 'job_1',
@@ -71,15 +66,7 @@ export default function DashboardPage() {
     ];
 
     sampleJobs.forEach(job => {
-      const jobDoc = doc(db, 'jobPostings', job.id);
-      setDoc(jobDoc, job, { merge: true })
-        .catch(error => {
-          errorEmitter.emit('permission-error', new FirestorePermissionError({
-            path: jobDoc.path,
-            operation: 'create',
-            requestResourceData: job,
-          }));
-        });
+      setDoc(doc(db, 'jobPostings', job.id), job, { merge: true });
     });
   };
 
@@ -136,45 +123,45 @@ export default function DashboardPage() {
     <div className="space-y-10 pb-20 max-w-7xl mx-auto">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <PageHeader
-          title={`Welcome back, ${profile.firstName || 'Expert'}`}
-          subtitle="Real-time precision matches based on your professional profile."
+          title={`Professional Hub`}
+          subtitle={`Welcome back, ${profile.firstName}. Managing active opportunities.`}
         />
         <div className="flex items-center gap-2 bg-indigo-500/10 text-indigo-600 border border-indigo-200 px-4 py-2 rounded-full">
           <Sparkles className="h-4 w-4" />
-          <span className="text-[10px] font-bold uppercase tracking-wider">Intelligence Hub: Active</span>
+          <span className="text-[10px] font-bold uppercase tracking-wider">Identity Verified</span>
         </div>
       </div>
 
       <div className="grid md:grid-cols-3 gap-6">
-        <Card className="md:col-span-2 border-none shadow-xl bg-gradient-to-br from-indigo-500/[0.05] to-purple-500/[0.05]">
+        <Card className="md:col-span-2 border border-border shadow-xl bg-gradient-to-br from-indigo-500/[0.02] to-transparent">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">AI Intelligence Brief</CardTitle>
+            <CardTitle className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">Network Insights</CardTitle>
             <Brain className="h-5 w-5 text-indigo-500" />
           </CardHeader>
           <CardContent>
             <p className="text-lg font-medium mb-4 leading-relaxed">
-              "We've detected a significant surge in <strong>Full-Stack TypeScript</strong> roles within your primary market. Your profile is currently positioned in the top tier of candidates."
+              We've observed a high demand for <strong>{profile.skillIds?.[0] || 'Technical'} experts</strong> in your market. Your profile is currently aligned with several top-tier project briefs.
             </p>
-            <Button variant="secondary" size="sm" className="rounded-full font-bold px-6">Explore Trends</Button>
+            <Button variant="outline" size="sm" className="rounded-full font-bold px-6 border-indigo-200 text-indigo-600 hover:bg-indigo-50">View Technical Trends</Button>
           </CardContent>
         </Card>
         
-        <Card className="border-none shadow-xl">
+        <Card className="border border-border shadow-xl">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">Market Pulse</CardTitle>
             <TrendingUp className="h-5 w-5 text-indigo-500" />
           </CardHeader>
           <CardContent className="space-y-4 pt-2">
             <div className="flex justify-between items-center text-sm">
-              <span className="text-muted-foreground">Skill Demand</span>
-              <span className="font-bold text-green-500">+18%</span>
+              <span className="text-muted-foreground">Active Projects</span>
+              <span className="font-bold">{rawJobs?.length || 0}</span>
             </div>
             <div className="flex justify-between items-center text-sm">
-              <span className="text-muted-foreground">Profile Sync</span>
-              <span className="font-bold">Optimized</span>
+              <span className="text-muted-foreground">Profile Alignment</span>
+              <span className="font-bold text-green-500">Elite</span>
             </div>
             <div className="h-2 bg-secondary rounded-full overflow-hidden mt-2">
-              <div className="h-full bg-indigo-600 w-[92%] rounded-full shadow-lg" />
+              <div className="h-full bg-indigo-600 w-[94%] rounded-full shadow-lg" />
             </div>
           </CardContent>
         </Card>
@@ -185,13 +172,13 @@ export default function DashboardPage() {
           <div className="relative flex-grow">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
             <Input
-              placeholder="Search opportunity database..."
+              placeholder="Filter project database..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-12 h-14 rounded-[20px] bg-background border-none shadow-sm focus-visible:ring-2 focus-visible:ring-indigo-500"
+              className="pl-12 h-14 rounded-[20px] bg-background border-border shadow-sm focus-visible:ring-2 focus-visible:ring-indigo-500"
             />
           </div>
-          <Button className="h-14 px-8 rounded-[20px] font-bold bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-500/20">Advanced Filter</Button>
+          <Button className="h-14 px-8 rounded-[20px] font-bold bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-500/20 transition-all">Advanced Search</Button>
         </div>
 
         {isJobsLoading || isMatching ? (
@@ -207,16 +194,16 @@ export default function DashboardPage() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-24 bg-secondary/[0.15] rounded-[48px] border-2 border-dashed border-indigo-200/50 space-y-6">
-            <div className="h-16 w-16 bg-indigo-500/10 rounded-3xl flex items-center justify-center text-indigo-500 mx-auto shadow-sm">
-              <Database className="h-8 w-8" />
+          <div className="text-center py-24 bg-indigo-500/[0.02] rounded-[48px] border-2 border-dashed border-indigo-200/50 space-y-6">
+            <div className="h-20 w-20 bg-indigo-500/10 rounded-3xl flex items-center justify-center text-indigo-500 mx-auto shadow-sm">
+              <Briefcase className="h-10 w-10" />
             </div>
             <div className="space-y-2">
-              <h3 className="text-2xl font-bold tracking-tight">Intelligence Hub Empty</h3>
-              <p className="text-muted-foreground max-w-sm mx-auto">The project repository is currently awaiting sync. Click below to populate demo data.</p>
+              <h3 className="text-2xl font-extrabold tracking-tight">Hub Repository Empty</h3>
+              <p className="text-muted-foreground max-w-sm mx-auto">No project postings were found in your region. You can populate the database with demo opportunities below.</p>
             </div>
-            <Button onClick={handleSeedData} className="rounded-full px-10 h-12 bg-indigo-600 font-bold hover:bg-indigo-700 shadow-xl shadow-indigo-500/20">
-              Populate Hub
+            <Button onClick={handleSeedData} className="rounded-full px-12 h-14 bg-indigo-600 font-bold hover:bg-indigo-700 shadow-2xl shadow-indigo-500/20 transition-all">
+              Initialize Project Database
             </Button>
           </div>
         )}
