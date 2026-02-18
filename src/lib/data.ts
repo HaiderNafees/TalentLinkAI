@@ -7,22 +7,22 @@ export const freelancerProfile: FreelancerProfile = {
   id: 'fp_001',
   name: 'Jane Doe',
   email: 'jane.doe@example.com',
-  title: 'Senior Frontend Developer',
+  title: 'Senior AI-First Frontend Engineer',
   avatarUrl: userAvatar?.imageUrl ?? 'https://picsum.photos/seed/user-avatar/40/40',
   skills: [
     'React',
     'TypeScript',
     'Next.js',
+    'Generative UI',
     'Tailwind CSS',
-    'Node.js',
-    'GraphQL',
+    'Genkit',
+    'Vercel AI SDK',
   ],
   experience: `
-With over 8 years of experience in frontend development, I specialize in building modern, responsive, and performant web applications using the React ecosystem. 
-I have a strong command of TypeScript and Next.js for server-side rendering and static site generation. 
-My expertise includes state management with Redux and Zustand, API integration using REST and GraphQL, and creating beautiful UIs with Tailwind CSS and Styled Components.
-I have led frontend teams, mentored junior developers, and collaborated closely with designers and backend engineers to deliver high-quality products.
-I am passionate about clean code, accessibility, and creating exceptional user experiences.
+8+ years building intelligent user interfaces. I specialize in bridging the gap between complex AI backends and seamless user experiences. 
+Expert in building GenAI-powered applications using React, Next.js, and Genkit. 
+I focus on the "Double-Sided AI" approach: making tools that are as smart as they are beautiful. 
+Led teams at high-growth startups to implement AI-driven dashboarding and automated workflow optimization.
   `.trim(),
   portfolioUrl: 'https://example.com',
 };
@@ -30,76 +30,63 @@ I am passionate about clean code, accessibility, and creating exceptional user e
 export const jobPostings: JobPosting[] = [
   {
     id: 'job_001',
-    title: 'React Developer for E-commerce Platform',
-    company: 'Shopify',
+    title: 'Generative UI Engineer',
+    company: 'Anthropic (via Outlier)',
     description:
-      'We are looking for a skilled React Developer to join our team building a next-generation e-commerce platform. You will be responsible for developing new user-facing features, building reusable components, and optimizing applications for maximum speed and scalability.',
-    requiredSkills: ['React', 'Redux', 'JavaScript', 'HTML', 'CSS'],
-    preferredSkills: ['TypeScript', 'Next.js', 'GraphQL'],
-    experienceLevel: 'Mid',
+      'We need a pioneer to build our next generation of dynamic, AI-rendered interfaces. You will work on components that morph based on LLM output and context. High emphasis on performance and clean React architecture.',
+    requiredSkills: ['React', 'TypeScript', 'Tailwind CSS', 'Vercel AI SDK'],
+    preferredSkills: ['Next.js', 'Framer Motion'],
+    experienceLevel: 'Senior',
     location: 'Remote',
-    salaryRange: '$90k - $120k',
-    postedAt: '2 days ago',
+    salaryRange: '$180k - $240k',
+    postedAt: '2h ago',
   },
   {
     id: 'job_002',
-    title: 'Senior Next.js Engineer',
+    title: 'Senior Full-Stack AI Engineer',
     company: 'Vercel',
     description:
-      'Join the team behind Next.js to work on cutting-edge features for the framework and our platform. We need an experienced engineer with deep knowledge of React, Next.js, and web performance.',
+      'Help us shape the future of AI on the web. You will build core platform features that integrate GenAI directly into the developer workflow. Deep knowledge of Next.js and edge runtimes is mandatory.',
     requiredSkills: [
       'Next.js',
       'React',
       'TypeScript',
       'Node.js',
-      'Web Performance',
+      'Vector Databases',
     ],
-    preferredSkills: ['Rust', 'Go'],
+    preferredSkills: ['Rust', 'Python'],
     experienceLevel: 'Senior',
     location: 'Remote',
-    salaryRange: '$150k - $200k',
-    postedAt: '5 days ago',
+    salaryRange: '$160k - $210k',
+    postedAt: '5h ago',
   },
   {
     id: 'job_003',
-    title: 'Full-Stack Developer (Vue.js)',
-    company: 'GitLab',
+    title: 'Product Designer (AI Focus)',
+    company: 'Linear',
     description:
-      'We are seeking a Full-Stack Developer with expertise in Vue.js and Ruby on Rails. You will contribute to all aspects of our product, from backend services to frontend components.',
-    requiredSkills: ['Vue.js', 'Ruby on Rails', 'PostgreSQL', 'JavaScript'],
+      'Design the intelligent project management interface of the future. We are looking for someone who understands how AI can reduce cognitive load without cluttering the UI.',
+    requiredSkills: ['Figma', 'UI/UX Design', 'Prototyping'],
+    preferredSkills: ['React', 'Spline'],
     experienceLevel: 'Mid',
     location: 'Remote',
-    postedAt: '1 week ago',
+    postedAt: '1d ago',
   },
   {
     id: 'job_004',
-    title: 'UI/UX Designer & Developer',
-    company: 'InVision',
+    title: 'Frontend Lead - AI Dashboards',
+    company: 'OpenAI (Contract)',
     description:
-      'A hybrid role for a talented individual who can both design beautiful user interfaces and bring them to life with code. Strong skills in Figma, HTML, CSS, and JavaScript are required.',
+      'Leading a short-term, high-impact project to visualize complex neural network outputs for enterprise customers. Must be a master of D3.js and React.',
     requiredSkills: [
-      'Figma',
-      'UI Design',
-      'UX Research',
-      'HTML',
-      'CSS',
-      'JavaScript',
+      'React',
+      'D3.js',
+      'TypeScript',
+      'Data Visualization',
     ],
-    preferredSkills: ['React', 'Design Systems'],
-    experienceLevel: 'Mid',
+    preferredSkills: ['Three.js'],
+    experienceLevel: 'Senior',
     location: 'Remote',
-    postedAt: '3 days ago',
-  },
-  {
-    id: 'job_005',
-    title: 'Junior Frontend Developer',
-    company: 'Startup Inc.',
-    description:
-      'Eager to learn and grow? We are looking for a junior developer to assist our senior team. You will work on various parts of our web app, learn best practices, and contribute to a fast-paced environment. Basic knowledge of HTML, CSS, and JavaScript is a must.',
-    requiredSkills: ['HTML', 'CSS', 'JavaScript'],
-    preferredSkills: ['React', 'Git'],
-    experienceLevel: 'Junior',
-    location: 'New York, NY',
-    postedAt: '1 day ago',
+    postedAt: '3d ago',
   },
 ];
