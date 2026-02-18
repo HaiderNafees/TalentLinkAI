@@ -10,6 +10,7 @@ import {
   LogOut,
   Settings,
   Search,
+  Lightbulb,
 } from 'lucide-react';
 
 import {
@@ -44,6 +45,7 @@ import { freelancerProfile } from '@/lib/data';
 
 const navItems = [
   { href: '/dashboard', icon: LayoutDashboard, label: 'Hub Overview' },
+  { href: '/dashboard/ideator', icon: Lightbulb, label: 'Gig Ideator' },
   { href: '/dashboard/profile', icon: User, label: 'Identity' },
   { href: '/dashboard/messages', icon: MessageSquare, label: 'Messages' },
   { href: '/dashboard/notifications', icon: Bell, label: 'Alerts' },
