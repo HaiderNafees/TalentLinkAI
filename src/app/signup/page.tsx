@@ -17,6 +17,7 @@ import Logo from '@/components/logo';
 import { Separator } from '@/components/ui/separator';
 import { useAuth, useUser, initiateEmailSignUp } from '@/firebase';
 import { Loader2 } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 function GoogleIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -57,6 +58,7 @@ export default function SignupPage() {
   const auth = useAuth();
   const { user, isUserLoading } = useUser();
   const router = useRouter();
+  const { toast } = useToast();
 
   useEffect(() => {
     if (user && !isUserLoading) {
@@ -67,7 +69,14 @@ export default function SignupPage() {
   const handleSignUp = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSigningUp(true);
-    initiateEmailSignUp(auth, email, password);
+    initiateEmailSignUp(auth, email, password, (error) => {
+      setIsSigningUp(false);
+      toast({
+        variant: 'destructive',
+        title: 'Registration Failed',
+        description: error.message || 'Could not create account. Please try again.',
+      });
+    });
   };
 
   return (
@@ -79,7 +88,7 @@ export default function SignupPage() {
           </div>
           <CardTitle className="text-2xl font-bold tracking-tight">Join the Network</CardTitle>
           <CardDescription>
-            Register your profile to start receiving precision AI matches.
+            Register your profile to start receiving precision matches.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -131,7 +140,7 @@ export default function SignupPage() {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <Button type="submit" className="w-full rounded-lg font-semibold h-11" disabled={isSigningUp}>
+            <Button type="submit" className="w-full rounded-lg font-semibold h-11 bg-indigo-600 hover:bg-indigo-700" disabled={isSigningUp}>
               {isSigningUp ? <Loader2 className="h-4 w-4 animate-spin" /> : "Create Hub Profile"}
             </Button>
             <div className="relative my-4">

@@ -22,20 +22,25 @@ export default function DashboardPage() {
   const [matchedJobs, setMatchedJobs] = useState<any[]>([]);
   const [isMatching, setIsMatching] = useState(false);
 
+  // Memoize profile reference
   const profileRef = useMemoFirebase(() => (user ? doc(db, 'freelancers', user.uid) : null), [db, user]);
   const { data: profile, isLoading: isProfileLoading } = useDoc(profileRef);
 
+  // Memoize jobs query
   const jobsQuery = useMemoFirebase(() => collection(db, 'jobPostings'), [db]);
   const { data: rawJobs, isLoading: isJobsLoading } = useCollection(jobsQuery);
 
   const handleSeedData = () => {
-    if (!db) return;
+    if (!db || !user) return;
+    
+    // We add clientId to match security rules for demo purposes
     const sampleJobs = [
       {
         id: 'job_1',
+        clientId: user.uid,
         title: 'Full-Stack Developer (Next.js)',
         company: 'Vanguard Systems',
-        description: 'Lead the development of a performance-critical SaaS platform using Next.js 15, React 19, and advanced edge caching strategies.',
+        description: 'Lead the development of a performance-critical SaaS platform using Next.js 15 and React 19.',
         requiredSkills: ['React', 'Next.js', 'TypeScript', 'Node.js'],
         experienceLevel: 'Senior',
         location: 'Remote',
@@ -43,9 +48,10 @@ export default function DashboardPage() {
       },
       {
         id: 'job_2',
+        clientId: user.uid,
         title: 'GenAI Solution Architect',
         company: 'Cognitive Labs',
-        description: 'Design and optimize large-scale prompt orchestration frameworks for enterprise customers. Deep understanding of LLM latency and context windows required.',
+        description: 'Design and optimize large-scale prompt orchestration frameworks for enterprise customers.',
         requiredSkills: ['Python', 'LLMs', 'System Architecture', 'API Integration'],
         experienceLevel: 'Senior',
         location: 'Hybrid (NYC)',
@@ -53,9 +59,10 @@ export default function DashboardPage() {
       },
       {
         id: 'job_3',
+        clientId: user.uid,
         title: 'Frontend Engineer (UI Performance)',
         company: 'Nexus Flow',
-        description: 'Build polished, high-fidelity user interfaces. Focus on Framer Motion animations and optimizing Core Web Vitals.',
+        description: 'Build polished, high-fidelity user interfaces. Focus on Framer Motion and Core Web Vitals.',
         requiredSkills: ['React', 'Tailwind', 'Animations', 'Web Performance'],
         experienceLevel: 'Mid',
         location: 'Remote',
@@ -108,16 +115,14 @@ export default function DashboardPage() {
     runMatching();
   }, [profile, rawJobs]);
 
-  // Priority: Wait for user and profile fetch to complete
   if (isUserLoading || isProfileLoading) {
     return (
       <div className="flex h-[80vh] items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <Loader2 className="h-8 w-8 animate-spin text-indigo-600" />
       </div>
     );
   }
 
-  // Only show wizard if fetch is finished and no profile found
   if (!profile) {
     return <OnboardingWizard onComplete={() => window.location.reload()} />;
   }
@@ -132,11 +137,11 @@ export default function DashboardPage() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <PageHeader
           title={`Welcome back, ${profile.firstName || 'Expert'}`}
-          subtitle="Real-time precision matches based on your professional DNA."
+          subtitle="Real-time precision matches based on your professional profile."
         />
         <div className="flex items-center gap-2 bg-indigo-500/10 text-indigo-600 border border-indigo-200 px-4 py-2 rounded-full">
           <Sparkles className="h-4 w-4" />
-          <span className="text-[10px] font-bold uppercase tracking-wider">Neural Sync: Active</span>
+          <span className="text-[10px] font-bold uppercase tracking-wider">Intelligence Hub: Active</span>
         </div>
       </div>
 
@@ -148,7 +153,7 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <p className="text-lg font-medium mb-4 leading-relaxed">
-              "We've detected a significant surge in <strong>Full-Stack TypeScript</strong> roles within your primary market. Your profile is currently positioned in the top 2% of matched candidates."
+              "We've detected a significant surge in <strong>Full-Stack TypeScript</strong> roles within your primary market. Your profile is currently positioned in the top tier of candidates."
             </p>
             <Button variant="secondary" size="sm" className="rounded-full font-bold px-6">Explore Trends</Button>
           </CardContent>
@@ -156,7 +161,7 @@ export default function DashboardPage() {
         
         <Card className="border-none shadow-xl">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">Market Sync</CardTitle>
+            <CardTitle className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">Market Pulse</CardTitle>
             <TrendingUp className="h-5 w-5 text-indigo-500" />
           </CardHeader>
           <CardContent className="space-y-4 pt-2">
@@ -208,10 +213,10 @@ export default function DashboardPage() {
             </div>
             <div className="space-y-2">
               <h3 className="text-2xl font-bold tracking-tight">Intelligence Hub Empty</h3>
-              <p className="text-muted-foreground max-w-sm mx-auto">The project repository is currently awaiting sync. Use the protocol below to populate demo data.</p>
+              <p className="text-muted-foreground max-w-sm mx-auto">The project repository is currently awaiting sync. Click below to populate demo data.</p>
             </div>
             <Button onClick={handleSeedData} className="rounded-full px-10 h-12 bg-indigo-600 font-bold hover:bg-indigo-700 shadow-xl shadow-indigo-500/20">
-              Populate Opportunity Hub
+              Populate Hub
             </Button>
           </div>
         )}

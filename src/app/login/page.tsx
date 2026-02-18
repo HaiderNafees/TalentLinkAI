@@ -17,6 +17,7 @@ import Logo from '@/components/logo';
 import { Separator } from '@/components/ui/separator';
 import { useAuth, useUser, initiateEmailSignIn } from '@/firebase';
 import { Loader2 } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 function GoogleIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -54,6 +55,7 @@ export default function LoginPage() {
   const auth = useAuth();
   const { user, isUserLoading } = useUser();
   const router = useRouter();
+  const { toast } = useToast();
 
   useEffect(() => {
     if (user && !isUserLoading) {
@@ -64,8 +66,14 @@ export default function LoginPage() {
   const handleSignIn = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoggingIn(true);
-    initiateEmailSignIn(auth, email, password);
-    // Note: Redirect is handled by the useEffect above when auth state changes
+    initiateEmailSignIn(auth, email, password, (error) => {
+      setIsLoggingIn(false);
+      toast({
+        variant: 'destructive',
+        title: 'Authentication Failed',
+        description: 'Please check your credentials and try again.',
+      });
+    });
   };
 
   return (
@@ -113,7 +121,7 @@ export default function LoginPage() {
                 className="rounded-lg" 
               />
             </div>
-            <Button type="submit" className="w-full rounded-lg font-semibold h-11" disabled={isLoggingIn}>
+            <Button type="submit" className="w-full rounded-lg font-semibold h-11 bg-indigo-600 hover:bg-indigo-700" disabled={isLoggingIn}>
               {isLoggingIn ? <Loader2 className="h-4 w-4 animate-spin" /> : "Continue to Dashboard"}
             </Button>
             <div className="relative my-4">
