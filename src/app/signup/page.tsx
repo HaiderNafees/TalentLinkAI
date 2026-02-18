@@ -1,4 +1,8 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -11,6 +15,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Logo from '@/components/logo';
 import { Separator } from '@/components/ui/separator';
+import { useAuth, useUser, initiateEmailSignUp } from '@/firebase';
+import { Loader2 } from 'lucide-react';
 
 function GoogleIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -42,6 +48,28 @@ function GoogleIcon(props: React.SVGProps<SVGSVGElement>) {
 }
 
 export default function SignupPage() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [isSigningUp, setIsSigningUp] = useState(false);
+  
+  const auth = useAuth();
+  const { user, isUserLoading } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user && !isUserLoading) {
+      router.push('/dashboard');
+    }
+  }, [user, isUserLoading, router]);
+
+  const handleSignUp = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSigningUp(true);
+    initiateEmailSignUp(auth, email, password);
+  };
+
   return (
     <div className="flex min-h-screen w-full items-center justify-center bg-background p-4 transition-colors duration-300">
       <Card className="mx-auto w-full max-w-md shadow-lg border">
@@ -55,15 +83,29 @@ export default function SignupPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4">
+          <form onSubmit={handleSignUp} className="grid gap-4">
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="grid gap-2">
                 <Label htmlFor="first-name">First Name</Label>
-                <Input id="first-name" placeholder="Expert" required className="rounded-lg" />
+                <Input 
+                  id="first-name" 
+                  placeholder="Expert" 
+                  required 
+                  className="rounded-lg"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="last-name">Last Name</Label>
-                <Input id="last-name" placeholder="User" required className="rounded-lg" />
+                <Input 
+                  id="last-name" 
+                  placeholder="User" 
+                  required 
+                  className="rounded-lg"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                />
               </div>
             </div>
             <div className="grid gap-2">
@@ -74,14 +116,23 @@ export default function SignupPage() {
                 placeholder="name@company.com"
                 required
                 className="rounded-lg"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="password">Security Key (Password)</Label>
-              <Input id="password" type="password" required className="rounded-lg" />
+              <Input 
+                id="password" 
+                type="password" 
+                required 
+                className="rounded-lg"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </div>
-            <Button type="submit" className="w-full rounded-lg font-semibold h-11" asChild>
-              <Link href="/dashboard">Create Hub Profile</Link>
+            <Button type="submit" className="w-full rounded-lg font-semibold h-11" disabled={isSigningUp}>
+              {isSigningUp ? <Loader2 className="h-4 w-4 animate-spin" /> : "Create Hub Profile"}
             </Button>
             <div className="relative my-4">
               <Separator />
@@ -89,11 +140,11 @@ export default function SignupPage() {
                 OR
               </div>
             </div>
-            <Button variant="outline" className="w-full rounded-lg h-11">
+            <Button variant="outline" className="w-full rounded-lg h-11" type="button">
               <GoogleIcon className="mr-2 h-4 w-4" />
               Sign up with Google
             </Button>
-          </div>
+          </form>
           <div className="mt-8 text-center text-sm text-muted-foreground">
             Already registered?{' '}
             <Link href="/login" className="underline font-bold text-foreground">

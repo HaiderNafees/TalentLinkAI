@@ -1,4 +1,8 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -11,6 +15,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Logo from '@/components/logo';
 import { Separator } from '@/components/ui/separator';
+import { useAuth, useUser, initiateEmailSignIn } from '@/firebase';
+import { Loader2 } from 'lucide-react';
 
 function GoogleIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -42,6 +48,26 @@ function GoogleIcon(props: React.SVGProps<SVGSVGElement>) {
 }
 
 export default function LoginPage() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const auth = useAuth();
+  const { user, isUserLoading } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user && !isUserLoading) {
+      router.push('/dashboard');
+    }
+  }, [user, isUserLoading, router]);
+
+  const handleSignIn = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoggingIn(true);
+    initiateEmailSignIn(auth, email, password);
+    // Note: Redirect is handled by the useEffect above when auth state changes
+  };
+
   return (
     <div className="flex min-h-screen w-full items-center justify-center bg-background p-4 transition-colors duration-300">
       <Card className="mx-auto w-full max-w-md shadow-lg border">
@@ -55,7 +81,7 @@ export default function LoginPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4">
+          <form onSubmit={handleSignIn} className="grid gap-4">
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -63,6 +89,8 @@ export default function LoginPage() {
                 type="email"
                 placeholder="name@example.com"
                 required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="rounded-lg"
               />
             </div>
@@ -76,10 +104,17 @@ export default function LoginPage() {
                   Forgot password?
                 </Link>
               </div>
-              <Input id="password" type="password" required className="rounded-lg" />
+              <Input 
+                id="password" 
+                type="password" 
+                required 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="rounded-lg" 
+              />
             </div>
-            <Button type="submit" className="w-full rounded-lg font-semibold h-11" asChild>
-              <Link href="/dashboard">Continue to Dashboard</Link>
+            <Button type="submit" className="w-full rounded-lg font-semibold h-11" disabled={isLoggingIn}>
+              {isLoggingIn ? <Loader2 className="h-4 w-4 animate-spin" /> : "Continue to Dashboard"}
             </Button>
             <div className="relative my-4">
               <Separator />
@@ -87,11 +122,11 @@ export default function LoginPage() {
                 OR
               </div>
             </div>
-            <Button variant="outline" className="w-full rounded-lg h-11">
+            <Button variant="outline" className="w-full rounded-lg h-11" type="button">
               <GoogleIcon className="mr-2 h-4 w-4" />
               Sign in with Google
             </Button>
-          </div>
+          </form>
           <div className="mt-8 text-center text-sm text-muted-foreground">
             New to the network?{' '}
             <Link href="/signup" className="underline font-bold text-foreground">

@@ -1,7 +1,8 @@
 'use client';
 
+import { useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   LayoutDashboard,
   User,
@@ -11,6 +12,7 @@ import {
   Settings,
   Search,
   Lightbulb,
+  Loader2,
 } from 'lucide-react';
 
 import {
@@ -42,6 +44,8 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { freelancerProfile } from '@/lib/data';
+import { useUser, useAuth } from '@/firebase';
+import { signOut } from 'firebase/auth';
 
 const navItems = [
   { href: '/dashboard', icon: LayoutDashboard, label: 'Hub Overview' },
@@ -57,6 +61,30 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const { user, isUserLoading } = useUser();
+  const auth = useAuth();
+
+  useEffect(() => {
+    if (!isUserLoading && !user) {
+      router.push('/login');
+    }
+  }, [user, isUserLoading, router]);
+
+  if (isUserLoading) {
+    return (
+      <div className="h-screen w-screen flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (!user) return null;
+
+  const handleSignOut = async () => {
+    await signOut(auth);
+    router.push('/');
+  };
 
   return (
     <SidebarProvider>
@@ -85,11 +113,9 @@ export default function DashboardLayout({
         <SidebarFooter className="p-4 border-t">
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild className="text-muted-foreground">
-                <Link href="/">
-                  <LogOut className="h-4 w-4" />
-                  <span>Exit to Site</span>
-                </Link>
+              <SidebarMenuButton onClick={handleSignOut} className="text-muted-foreground w-full">
+                <LogOut className="h-4 w-4" />
+                <span>Sign Out</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
@@ -131,15 +157,15 @@ export default function DashboardLayout({
                   className="relative h-9 w-9 rounded-full border p-0"
                 >
                   <Avatar className="h-full w-full">
-                    <AvatarImage src={freelancerProfile.avatarUrl} />
-                    <AvatarFallback>JD</AvatarFallback>
+                    <AvatarImage src={user?.photoURL || freelancerProfile.avatarUrl} />
+                    <AvatarFallback>{user?.displayName?.charAt(0) || 'U'}</AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56 mt-2">
                 <DropdownMenuLabel className="font-normal">
-                  <p className="font-bold">{freelancerProfile.name}</p>
-                  <p className="text-xs text-muted-foreground truncate">{freelancerProfile.email}</p>
+                  <p className="font-bold">{user?.displayName || 'User'}</p>
+                  <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
@@ -153,11 +179,9 @@ export default function DashboardLayout({
                   <span>Account</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild className="text-destructive">
-                   <Link href="/">
-                    <LogOut className="mr-2 h-4 w-4" />
-                    <span>Log out</span>
-                   </Link>
+                <DropdownMenuItem onClick={handleSignOut} className="text-destructive">
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Log out</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
