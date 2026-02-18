@@ -1,0 +1,710 @@
+{
+  "entities": {
+    "FreelancerProfile": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "FreelancerProfile",
+      "type": "object",
+      "description": "Represents a freelancer's detailed profile, showcasing their skills, experience, and preferences for job matching.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the FreelancerProfile entity. This ID is expected to be linked to an external authentication system."
+        },
+        "email": {
+          "type": "string",
+          "description": "The primary email address of the freelancer, used for contact and notifications.",
+          "format": "email"
+        },
+        "firstName": {
+          "type": "string",
+          "description": "The first name of the freelancer."
+        },
+        "lastName": {
+          "type": "string",
+          "description": "The last name of the freelancer."
+        },
+        "headline": {
+          "type": "string",
+          "description": "A short, professional headline summarizing the freelancer's expertise."
+        },
+        "bio": {
+          "type": "string",
+          "description": "A longer description of the freelancer's background, experience, and professional goals."
+        },
+        "profilePictureUrl": {
+          "type": "string",
+          "description": "URL to the freelancer's profile picture.",
+          "format": "uri"
+        },
+        "location": {
+          "type": "string",
+          "description": "The physical location or preferred work location of the freelancer."
+        },
+        "hourlyRate": {
+          "type": "number",
+          "description": "The freelancer's preferred hourly rate, if applicable."
+        },
+        "availabilityStatus": {
+          "type": "string",
+          "description": "The current availability status of the freelancer (e.g., 'Available', 'Busy', 'Looking for projects')."
+        },
+        "linkedInUrl": {
+          "type": "string",
+          "description": "URL to the freelancer's LinkedIn profile.",
+          "format": "uri"
+        },
+        "websiteUrl": {
+          "type": "string",
+          "description": "URL to the freelancer's personal website or professional portfolio.",
+          "format": "uri"
+        },
+        "skillIds": {
+          "type": "array",
+          "description": "References to Skills that the freelancer possesses. (Relationship: FreelancerProfile N:N Skill)",
+          "items": {
+            "type": "string"
+          }
+        },
+        "createdDate": {
+          "type": "string",
+          "description": "The date and time when the freelancer profile was created.",
+          "format": "date-time"
+        },
+        "updatedDate": {
+          "type": "string",
+          "description": "The date and time when the freelancer profile was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "email",
+        "firstName",
+        "lastName",
+        "availabilityStatus",
+        "skillIds",
+        "createdDate"
+      ]
+    },
+    "ClientProfile": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "ClientProfile",
+      "type": "object",
+      "description": "Represents a client's profile, including company information, for posting jobs and interacting with freelancers.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the ClientProfile entity. This ID is expected to be linked to an external authentication system."
+        },
+        "email": {
+          "type": "string",
+          "description": "The primary email address of the client or company contact.",
+          "format": "email"
+        },
+        "companyName": {
+          "type": "string",
+          "description": "The name of the client's company or organization."
+        },
+        "companyDescription": {
+          "type": "string",
+          "description": "A description of the client's company or organization."
+        },
+        "companyLogoUrl": {
+          "type": "string",
+          "description": "URL to the client's company logo.",
+          "format": "uri"
+        },
+        "websiteUrl": {
+          "type": "string",
+          "description": "URL to the client's company website.",
+          "format": "uri"
+        },
+        "industry": {
+          "type": "string",
+          "description": "The industry sector the client's company operates in."
+        },
+        "contactPersonName": {
+          "type": "string",
+          "description": "The name of the primary contact person at the client company."
+        },
+        "createdDate": {
+          "type": "string",
+          "description": "The date and time when the client profile was created.",
+          "format": "date-time"
+        },
+        "updatedDate": {
+          "type": "string",
+          "description": "The date and time when the client profile was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "email",
+        "companyName",
+        "contactPersonName",
+        "createdDate"
+      ]
+    },
+    "Skill": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Skill",
+      "type": "object",
+      "description": "Represents a specific skill that freelancers can possess and jobs can require.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Skill entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the skill (e.g., 'JavaScript', 'UI/UX Design', 'Content Writing')."
+        },
+        "description": {
+          "type": "string",
+          "description": "A brief description of the skill."
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "JobPosting": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "JobPosting",
+      "type": "object",
+      "description": "Represents a job opportunity posted by a client, which freelancers can apply for.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the JobPosting entity."
+        },
+        "clientId": {
+          "type": "string",
+          "description": "Reference to the ClientProfile who posted this job. (Relationship: ClientProfile 1:N JobPosting)"
+        },
+        "title": {
+          "type": "string",
+          "description": "The title of the job posting."
+        },
+        "description": {
+          "type": "string",
+          "description": "A detailed description of the job, including responsibilities and requirements."
+        },
+        "budgetAmount": {
+          "type": "number",
+          "description": "The budget allocated for the job."
+        },
+        "budgetCurrency": {
+          "type": "string",
+          "description": "The currency of the job budget (e.g., 'USD', 'EUR')."
+        },
+        "jobType": {
+          "type": "string",
+          "description": "The type of payment for the job (e.g., 'Fixed-price', 'Hourly')."
+        },
+        "locationRequirement": {
+          "type": "string",
+          "description": "Specifies the location requirement for the job (e.g., 'Remote', 'On-site', 'Hybrid', 'Specific City Name')."
+        },
+        "deadline": {
+          "type": "string",
+          "description": "The deadline for applying to the job.",
+          "format": "date-time"
+        },
+        "postedDate": {
+          "type": "string",
+          "description": "The date and time when the job posting was created.",
+          "format": "date-time"
+        },
+        "status": {
+          "type": "string",
+          "description": "The current status of the job posting (e.g., 'Open', 'Closed', 'Filled')."
+        },
+        "requiredSkillIds": {
+          "type": "array",
+          "description": "References to Skills required for this job. (Relationship: JobPosting N:N Skill)",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "clientId",
+        "title",
+        "description",
+        "budgetAmount",
+        "budgetCurrency",
+        "jobType",
+        "locationRequirement",
+        "postedDate",
+        "status",
+        "requiredSkillIds"
+      ]
+    },
+    "JobApplication": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "JobApplication",
+      "type": "object",
+      "description": "Records a freelancer's application to a specific job posting.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the JobApplication entity."
+        },
+        "freelancerId": {
+          "type": "string",
+          "description": "Reference to the FreelancerProfile who submitted the application. (Relationship: FreelancerProfile 1:N JobApplication)"
+        },
+        "jobPostingId": {
+          "type": "string",
+          "description": "Reference to the JobPosting the freelancer applied to. (Relationship: JobPosting 1:N JobApplication)"
+        },
+        "applicationDate": {
+          "type": "string",
+          "description": "The date and time when the application was submitted.",
+          "format": "date-time"
+        },
+        "status": {
+          "type": "string",
+          "description": "The current status of the application (e.g., 'Applied', 'Reviewed', 'Interviewing', 'Offer Extended', 'Accepted', 'Rejected', 'Withdrawn')."
+        },
+        "coverLetter": {
+          "type": "string",
+          "description": "The content of the cover letter submitted with the application."
+        },
+        "portfolioUrls": {
+          "type": "array",
+          "description": "Optional URLs to specific portfolio items relevant to this application.",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "freelancerId",
+        "jobPostingId",
+        "applicationDate",
+        "status"
+      ]
+    },
+    "ExperienceEntry": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "ExperienceEntry",
+      "type": "object",
+      "description": "Details a single work experience entry within a freelancer's profile.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the ExperienceEntry entity."
+        },
+        "freelancerId": {
+          "type": "string",
+          "description": "Reference to the FreelancerProfile this experience entry belongs to. (Relationship: FreelancerProfile 1:N ExperienceEntry)"
+        },
+        "title": {
+          "type": "string",
+          "description": "The job title or role held."
+        },
+        "companyName": {
+          "type": "string",
+          "description": "The name of the company or organization."
+        },
+        "location": {
+          "type": "string",
+          "description": "The location where the work was performed."
+        },
+        "startDate": {
+          "type": "string",
+          "description": "The start date of the work experience.",
+          "format": "date"
+        },
+        "endDate": {
+          "type": "string",
+          "description": "The end date of the work experience. Null if it's the current role.",
+          "format": "date"
+        },
+        "description": {
+          "type": "string",
+          "description": "A detailed description of responsibilities and achievements in this role."
+        }
+      },
+      "required": [
+        "id",
+        "freelancerId",
+        "title",
+        "companyName",
+        "startDate",
+        "description"
+      ]
+    },
+    "PortfolioItem": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "PortfolioItem",
+      "type": "object",
+      "description": "Represents a single portfolio item or project within a freelancer's profile.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the PortfolioItem entity."
+        },
+        "freelancerId": {
+          "type": "string",
+          "description": "Reference to the FreelancerProfile this portfolio item belongs to. (Relationship: FreelancerProfile 1:N PortfolioItem)"
+        },
+        "title": {
+          "type": "string",
+          "description": "The title of the portfolio project."
+        },
+        "description": {
+          "type": "string",
+          "description": "A detailed description of the project, including goals, challenges, and outcomes."
+        },
+        "projectUrl": {
+          "type": "string",
+          "description": "URL to the live project, repository, or detailed case study.",
+          "format": "uri"
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "URL to an image representing the project (e.g., thumbnail, screenshot).",
+          "format": "uri"
+        },
+        "dateCompleted": {
+          "type": "string",
+          "description": "The date when the project was completed.",
+          "format": "date"
+        },
+        "skillIds": {
+          "type": "array",
+          "description": "References to Skills demonstrated or used in this project. (Relationship: PortfolioItem N:N Skill)",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "freelancerId",
+        "title",
+        "description",
+        "projectUrl"
+      ]
+    },
+    "Notification": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Notification",
+      "type": "object",
+      "description": "Represents a notification sent to a user (freelancer or client) about platform activities.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Notification entity."
+        },
+        "recipientUserId": {
+          "type": "string",
+          "description": "Reference to the ID of the user (FreelancerProfile or ClientProfile) who is the recipient of this notification. (Relationship: User 1:N Notification)"
+        },
+        "type": {
+          "type": "string",
+          "description": "The type of notification (e.g., 'JobMatch', 'ApplicationUpdate', 'NewMessage', 'Announcement')."
+        },
+        "message": {
+          "type": "string",
+          "description": "The content of the notification message."
+        },
+        "isRead": {
+          "type": "boolean",
+          "description": "A boolean indicating whether the notification has been read by the recipient."
+        },
+        "createdDate": {
+          "type": "string",
+          "description": "The date and time when the notification was created.",
+          "format": "date-time"
+        },
+        "relatedEntityId": {
+          "type": "string",
+          "description": "Optional: Reference to another entity related to the notification (e.g., 'jobPostingId', 'messageId', 'conversationId')."
+        }
+      },
+      "required": [
+        "id",
+        "recipientUserId",
+        "type",
+        "message",
+        "isRead",
+        "createdDate"
+      ]
+    },
+    "Conversation": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Conversation",
+      "type": "object",
+      "description": "Represents a direct messaging conversation between users (freelancers and/or clients).",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Conversation entity."
+        },
+        "participantIds": {
+          "type": "array",
+          "description": "References to the IDs of all users (FreelancerProfile or ClientProfile) participating in this conversation. (Relationship: User N:N Conversation)",
+          "items": {
+            "type": "string"
+          }
+        },
+        "subject": {
+          "type": "string",
+          "description": "The subject or topic of the conversation."
+        },
+        "createdDate": {
+          "type": "string",
+          "description": "The date and time when the conversation was initiated.",
+          "format": "date-time"
+        },
+        "lastMessageDate": {
+          "type": "string",
+          "description": "The date and time when the last message in the conversation was sent.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "participantIds",
+        "createdDate",
+        "lastMessageDate"
+      ]
+    },
+    "Message": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Message",
+      "type": "object",
+      "description": "Represents a single message within a conversation.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Message entity."
+        },
+        "conversationId": {
+          "type": "string",
+          "description": "Reference to the Conversation this message belongs to. (Relationship: Conversation 1:N Message)"
+        },
+        "senderId": {
+          "type": "string",
+          "description": "Reference to the ID of the user (FreelancerProfile or ClientProfile) who sent this message. (Relationship: User 1:N Message)"
+        },
+        "content": {
+          "type": "string",
+          "description": "The actual text content of the message."
+        },
+        "sentDate": {
+          "type": "string",
+          "description": "The date and time when the message was sent.",
+          "format": "date-time"
+        },
+        "isRead": {
+          "type": "boolean",
+          "description": "A boolean indicating whether the message has been read by the recipient(s)."
+        }
+      },
+      "required": [
+        "id",
+        "conversationId",
+        "senderId",
+        "content",
+        "sentDate",
+        "isRead"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/freelancers/{freelancerId}",
+        "definition": {
+          "entityName": "FreelancerProfile",
+          "schema": {
+            "$ref": "#/backend/entities/FreelancerProfile"
+          },
+          "description": "Primary profile for a freelancer. The document ID (`freelancerId`) matches the Firebase Authentication UID. Publicly readable for discoverability, writeable only by the owner.",
+          "params": [
+            {
+              "name": "freelancerId",
+              "description": "The unique ID of the freelancer, matching their Firebase Authentication UID."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/clients/{clientId}",
+        "definition": {
+          "entityName": "ClientProfile",
+          "schema": {
+            "$ref": "#/backend/entities/ClientProfile"
+          },
+          "description": "Primary profile for a client. The document ID (`clientId`) matches the Firebase Authentication UID. Publicly readable (e.g., for freelancers to view who posted a job), writeable only by the owner.",
+          "params": [
+            {
+              "name": "clientId",
+              "description": "The unique ID of the client, matching their Firebase Authentication UID."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/skills/{skillId}",
+        "definition": {
+          "entityName": "Skill",
+          "schema": {
+            "$ref": "#/backend/entities/Skill"
+          },
+          "description": "Global collection of skills available on the platform. Read-only for all users.",
+          "params": [
+            {
+              "name": "skillId",
+              "description": "The unique ID of the skill."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/jobPostings/{jobPostingId}",
+        "definition": {
+          "entityName": "JobPosting",
+          "schema": {
+            "$ref": "#/backend/entities/JobPosting"
+          },
+          "description": "Publicly viewable job postings. Only the client (`clientId`) who owns the posting can create, update, or delete. Includes 'clientId' for Authorization Independence.",
+          "params": [
+            {
+              "name": "jobPostingId",
+              "description": "The unique ID of the job posting."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/jobApplications/{jobApplicationId}",
+        "definition": {
+          "entityName": "JobApplication",
+          "schema": {
+            "$ref": "#/backend/entities/JobApplication"
+          },
+          "description": "Records a freelancer's application to a job. Accessible by the submitting freelancer (`freelancerId`) and the client (`clientId`) who posted the job. Requires denormalized 'clientId' from the JobPosting to be added to the schema for Authorization Independence.",
+          "params": [
+            {
+              "name": "jobApplicationId",
+              "description": "The unique ID of the job application."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/freelancers/{freelancerId}/experienceEntries/{experienceEntryId}",
+        "definition": {
+          "entityName": "ExperienceEntry",
+          "schema": {
+            "$ref": "#/backend/entities/ExperienceEntry"
+          },
+          "description": "Private collection of work experience entries for a specific freelancer. Only the owning freelancer can create, read, update, or delete. Includes 'freelancerId' which matches the path parameter for Authorization Independence.",
+          "params": [
+            {
+              "name": "freelancerId",
+              "description": "The unique ID of the freelancer, matching their Firebase Authentication UID."
+            },
+            {
+              "name": "experienceEntryId",
+              "description": "The unique ID of the experience entry."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/freelancers/{freelancerId}/portfolioItems/{portfolioItemId}",
+        "definition": {
+          "entityName": "PortfolioItem",
+          "schema": {
+            "$ref": "#/backend/entities/PortfolioItem"
+          },
+          "description": "Private collection of portfolio items for a specific freelancer. Only the owning freelancer can create, read, update, or delete. Includes 'freelancerId' which matches the path parameter for Authorization Independence.",
+          "params": [
+            {
+              "name": "freelancerId",
+              "description": "The unique ID of the freelancer, matching their Firebase Authentication UID."
+            },
+            {
+              "name": "portfolioItemId",
+              "description": "The unique ID of the portfolio item."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/notifications/{notificationId}",
+        "definition": {
+          "entityName": "Notification",
+          "schema": {
+            "$ref": "#/backend/entities/Notification"
+          },
+          "description": "Private notifications for a specific user (either freelancer or client). Only the `recipientUserId` can read or update (e.g., mark as read). The 'recipientUserId' in the document must match the 'userId' path parameter for Authorization Independence.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique ID of the user (freelancer or client), matching their Firebase Authentication UID."
+            },
+            {
+              "name": "notificationId",
+              "description": "The unique ID of the notification."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/conversations/{conversationId}",
+        "definition": {
+          "entityName": "Conversation",
+          "schema": {
+            "$ref": "#/backend/entities/Conversation"
+          },
+          "description": "Direct messaging conversations. Accessible only by users whose UIDs are present in the 'participantIds' array. Includes 'participantIds' for Authorization Independence.",
+          "params": [
+            {
+              "name": "conversationId",
+              "description": "The unique ID of the conversation."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/conversations/{conversationId}/messages/{messageId}",
+        "definition": {
+          "entityName": "Message",
+          "schema": {
+            "$ref": "#/backend/entities/Message"
+          },
+          "description": "Individual messages within a conversation. Accessible only by users whose UIDs are present in the 'participantIds' array of the conversation. Requires denormalized 'participantIds' from the parent Conversation to be added to the schema for Authorization Independence.",
+          "params": [
+            {
+              "name": "conversationId",
+              "description": "The unique ID of the parent conversation."
+            },
+            {
+              "name": "messageId",
+              "description": "The unique ID of the message."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore data structure for 'Freelance Outlier' is designed with a strong emphasis on Authorization Independence, QAPs (Query-Agnostic Rules), and clarity, adhering strictly to the provided core design principles and mandates. \n\n**Authorization Independence (CRITICAL) & Denormalization Strategy:**\n\n*   **User Profiles (`FreelancerProfile`, `ClientProfile`):** Each user's primary profile is stored in a top-level collection (`/freelancers/{freelancerId}`, `/clients/{clientId}`), where the document ID directly corresponds to the `request.auth.uid`. This provides immediate, robust ownership verification without any `get()` calls.\n*   **User-Owned Subcollections (`ExperienceEntry`, `PortfolioItem`, `Notification`):** For data directly nested under a user, such as a freelancer's experience entries or a user's notifications, a subcollection model is used (e.g., `/freelancers/{freelancerId}/experienceEntries/{experienceEntryId}`). To ensure Authorization Independence (Mandate A), each document in these subcollections explicitly includes the `ownerId` (e.g., `freelancerId` or `recipientUserId`) within its data. This denormalization allows security rules to check `request.auth.uid == resource.data.ownerId` directly on the document, eliminating expensive and insecure `get()` operations on parent documents.\n*   **Collaborative Data (`Conversation`, `Message`):** For entities involving multiple users, like `Conversation`s, a `membership map` (`participantIds: {uid1: true, uid2: true}`) is denormalized directly into the document (`/conversations/{conversationId}`). For subcollections like `Message`s (`/conversations/{conversationId}/messages/{messageId}`), the `participantIds` from the parent conversation *must* be denormalized into each `Message` document as well. This allows security rules to evaluate `request.auth.uid in resource.data.participantIds` on every message document without needing to `get()` the parent `Conversation` document. **Note:** The `JobApplication` and `Message` schemas will require the addition of `clientId` and `participantIds` fields, respectively, to fully implement this denormalization strategy effectively for authorization independence.\n*   **Cross-Ownership (`JobApplication`):** A `JobApplication` needs to be accessible by both the applying freelancer and the client who posted the job. To prevent `get()` calls in rules, the `JobApplication` document (`/jobApplications/{jobApplicationId}`) explicitly denormalizes both `freelancerId` (the applicant) and `clientId` (the job poster, copied from `JobPosting`). This ensures that security rules can verify `request.auth.uid == resource.data.freelancerId || request.auth.uid == resource.data.clientId` directly on the `JobApplication` document.\n\n**QAPs (Rules are not Filters):**\n\n*   **Structural Segregation (Mandate B):** Data with different security postures is separated into distinct collections or paths.\n    *   **Public Collections:** `JobPosting`s (`/jobPostings`) are designed to be publicly listable, allowing freelancers to discover jobs. All documents in this collection share the same security posture for reads (publicly readable). Write access is restricted to the owning client (`clientId`).\n    *   **User-Specific Collections:** `ExperienceEntry`, `PortfolioItem`, and `Notification` are placed under user-specific paths (`/freelancers/{freelancerId}/...` or `/users/{userId}/...`). This intrinsically scopes `list` operations to a single user, ensuring that all documents retrieved are owned by or relevant to the requesting user.\n    *   **Collaborative Collections:** `Conversation`s (`/conversations`) and their nested `Message`s (`/conversations/{conversationId}/messages`) use the denormalized `participantIds` field. Queries can be efficiently filtered by `participantIds contains request.auth.uid`, ensuring that `list` operations only return conversations or messages the user is authorized to see.\n*   **Explicit Authorization Fields:** The consistent use of fields like `freelancerId`, `clientId`, `recipientUserId`, `participantIds`, and `senderId` in documents enables precise and efficient security rules that can be evaluated at query time, fulfilling the QAPs principle by ensuring that rules do not act as filters on unauthorized data after retrieval.\n\n**Sign-up and Sign-in:** The Firebase Authentication providers `password` and `anonymous` are enabled, as specified in the application data. This allows for standard user registration and login flows. A demo account can be created programmatically via Firebase Auth SDKs, but its credentials would typically be managed outside the Firestore structure itself. The Firestore structure focuses on how user-related data is stored *after* authentication."
+  }
+}

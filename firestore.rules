@@ -1,0 +1,196 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /**
+     * FIREBASE SECURITY RULES DOCUMENTATION
+     *
+     * Core Philosophy:
+     * This ruleset implements a strict user-ownership and member-based authorization model designed 
+     * for a freelance marketplace. It prioritizes "Authorization Independence" by ensuring that 
+     * every document contains the necessary metadata (UIDs) to make a security decision without 
+     * requiring cross-document lookups (get() calls).
+     *
+     * Data Structure:
+     * - Top-Level Profiles: /freelancers and /clients are public for discovery.
+     * - Job Postings: Publicly readable; managed by the client who created them.
+     * - Shared Collaborative Data: Job applications and conversations use denormalized 
+     *   UID fields (freelancerId, clientId, participantIds) to manage multi-user access.
+     * - Private Scoped Data: Notifications, experience entries, and portfolio items are 
+     *   nested under user-specific paths and restricted to the owner.
+     *
+     * Key Security Decisions:
+     * 1. Public Discovery: Profiles and job postings are globally readable to allow the 
+     *    marketplace to function without requiring a complex search index for basic browsing.
+     * 2. Denormalization for Authorization: To maintain high performance, fields like 
+     *    'participantIds' (for messages) and 'clientId' (for applications) are required 
+     *    directly on the documents being secured.
+     * 3. Immutability: Critical relational fields (like owner IDs) are enforced as 
+     *    immutable during updates to prevent ownership hijacking.
+     * 4. Prototyping Flexibility: Rules do not enforce strict data schemas (types/required fields) 
+     *    except for those essential to authorization and relational integrity.
+     */
+
+    // --- Helper Functions ---
+
+    /** @description Checks if the user is authenticated with Firebase Auth. */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /** @description Checks if the authenticated user's UID matches the provided userId. */
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    /** @description Checks if the authenticated user's UID matches an ID stored within the document data. */
+    function isFieldOwner(field) {
+      return isSignedIn() && request.auth.uid == field;
+    }
+
+    /** @description Checks if the user is part of a list/array of allowed participants. */
+    function isMember(participantList) {
+      return isSignedIn() && request.auth.uid in participantList;
+    }
+
+    /** @description Ensures a document exists and the current user is the owner. Used for updates and deletes. */
+    function isExistingOwner(userId) {
+      return resource != null && isOwner(userId);
+    }
+
+    /** @description Validates that a field is not being changed during an update. */
+    function isImmutable(field) {
+      return !(field in request.resource.data) || request.resource.data[field] == resource.data[field];
+    }
+
+    // --- Collection Rules ---
+
+    /**
+     * @description Publicly readable freelancer profiles; writeable only by the account owner.
+     * @path /freelancers/{freelancerId}
+     * @allow (get, list) if true; (create, update) if isOwner(freelancerId).
+     * @deny (write) if request.auth.uid != freelancerId.
+     * @principle Ownership (UID matches Document ID).
+     */
+    match /freelancers/{freelancerId} {
+      allow get, list: if true;
+      allow create: if isOwner(freelancerId) && request.resource.data.id == freelancerId;
+      allow update: if isExistingOwner(freelancerId) && isImmutable('id');
+      allow delete: if isExistingOwner(freelancerId);
+
+      /**
+       * @description Private work experience entries. Restricted to the profile owner.
+       * @path /freelancers/{freelancerId}/experienceEntries/{entryId}
+       */
+      match /experienceEntries/{entryId} {
+        allow get, list: if isOwner(freelancerId);
+        allow create: if isOwner(freelancerId) && request.resource.data.freelancerId == freelancerId;
+        allow update: if isExistingOwner(freelancerId) && isImmutable('freelancerId');
+        allow delete: if isExistingOwner(freelancerId);
+      }
+
+      /**
+       * @description Private portfolio projects. Restricted to the profile owner.
+       * @path /freelancers/{freelancerId}/portfolioItems/{itemId}
+       */
+      match /portfolioItems/{itemId} {
+        allow get, list: if isOwner(freelancerId);
+        allow create: if isOwner(freelancerId) && request.resource.data.freelancerId == freelancerId;
+        allow update: if isExistingOwner(freelancerId) && isImmutable('freelancerId');
+        allow delete: if isExistingOwner(freelancerId);
+      }
+    }
+
+    /**
+     * @description Publicly readable client profiles; writeable only by the account owner.
+     * @path /clients/{clientId}
+     * @allow (get, list) if true; (create, update) if isOwner(clientId).
+     * @deny (write) if request.auth.uid != clientId.
+     * @principle Ownership (UID matches Document ID).
+     */
+    match /clients/{clientId} {
+      allow get, list: if true;
+      allow create: if isOwner(clientId) && request.resource.data.id == clientId;
+      allow update: if isExistingOwner(clientId) && isImmutable('id');
+      allow delete: if isExistingOwner(clientId);
+    }
+
+    /**
+     * @description Global read-only collection of skills.
+     * @path /skills/{skillId}
+     * @allow (get, list) if true;
+     * @deny (write) if true;
+     * @principle Static Read-Only Data.
+     */
+    match /skills/{skillId} {
+      allow get, list: if true;
+      allow create, update, delete: if false;
+    }
+
+    /**
+     * @description Public job postings. Managed by the client who posted the job.
+     * @path /jobPostings/{jobPostingId}
+     * @allow (create) if authenticated and clientId matches UID.
+     * @deny (update) if user is not the original clientId.
+     * @principle Public Read with Owner-Only Writes.
+     */
+    match /jobPostings/{jobPostingId} {
+      allow get, list: if true;
+      allow create: if isSignedIn() && request.resource.data.clientId == request.auth.uid;
+      allow update: if resource != null && isFieldOwner(resource.data.clientId) && isImmutable('clientId');
+      allow delete: if resource != null && isFieldOwner(resource.data.clientId);
+    }
+
+    /**
+     * @description Shared job applications. Accessible by the applicant (freelancer) and the poster (client).
+     * @path /jobApplications/{jobApplicationId}
+     * @allow (get) if UID is freelancerId OR clientId.
+     * @deny (create) if freelancerId does not match current user.
+     * @principle Shared Access (Closed Collaborators via denormalized IDs).
+     */
+    match /jobApplications/{jobApplicationId} {
+      allow get, list: if isSignedIn() && (isFieldOwner(resource.data.freelancerId) || isFieldOwner(resource.data.clientId));
+      allow create: if isSignedIn() && request.resource.data.freelancerId == request.auth.uid;
+      allow update: if resource != null && (isFieldOwner(resource.data.freelancerId) || isFieldOwner(resource.data.clientId)) && isImmutable('freelancerId') && isImmutable('jobPostingId');
+      allow delete: if resource != null && (isFieldOwner(resource.data.freelancerId) || isFieldOwner(resource.data.clientId));
+    }
+
+    /**
+     * @description Private user notifications.
+     * @path /users/{userId}/notifications/{notificationId}
+     * @allow (get, list, update) if isOwner(userId).
+     * @principle Scoped Ownership.
+     */
+    match /users/{userId}/notifications/{notificationId} {
+      allow get, list: if isOwner(userId);
+      allow create: if isSignedIn() && request.resource.data.recipientUserId == userId;
+      allow update: if isExistingOwner(userId) && isImmutable('recipientUserId');
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Collaborative direct messaging threads.
+     * @path /conversations/{conversationId}
+     * @allow (get) if UID is in participantIds array.
+     * @principle Shared Access (Closed Collaborators via member array).
+     */
+    match /conversations/{conversationId} {
+      allow get, list: if isSignedIn() && isMember(resource.data.participantIds);
+      allow create: if isSignedIn() && isMember(request.resource.data.participantIds);
+      allow update: if resource != null && isMember(resource.data.participantIds);
+      allow delete: if resource != null && isMember(resource.data.participantIds);
+
+      /**
+       * @description Messages within a conversation.
+       * @path /conversations/{conversationId}/messages/{messageId}
+       * @principle Inherited member-only access via denormalized participantIds.
+       */
+      match /messages/{messageId} {
+        allow get, list: if isSignedIn() && isMember(resource.data.participantIds);
+        allow create: if isSignedIn() && isMember(request.resource.data.participantIds) && request.resource.data.senderId == request.auth.uid;
+        allow update: if resource != null && isFieldOwner(resource.data.senderId) && isImmutable('senderId') && isImmutable('conversationId');
+        allow delete: if resource != null && isFieldOwner(resource.data.senderId);
+      }
+    }
+  }
+}
