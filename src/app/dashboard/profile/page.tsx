@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
@@ -141,6 +140,7 @@ export default function ProfilePage() {
 
     const profileDoc = doc(db, 'freelancers', user.uid);
     
+    // Perform background sync with non-blocking pattern for speed
     setDoc(profileDoc, updateData, { merge: true })
       .then(() => {
         toast({
