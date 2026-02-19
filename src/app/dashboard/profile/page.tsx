@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
@@ -124,6 +125,7 @@ export default function ProfilePage() {
     const skillsArray = formData.skills.split(',').map(s => s.trim()).filter(s => s !== '');
     const updateData = {
       id: user.uid,
+      email: user.email || '',
       firstName: formData.firstName,
       lastName: formData.lastName,
       headline: formData.headline,
@@ -134,6 +136,7 @@ export default function ProfilePage() {
       linkedInUrl: formData.linkedInUrl,
       hourlyRate: parseFloat(formData.hourlyRate) || 0,
       updatedDate: new Date().toISOString(),
+      availabilityStatus: profile?.availabilityStatus || 'Available',
     };
 
     const profileDoc = doc(db, 'freelancers', user.uid);
@@ -214,12 +217,12 @@ export default function ProfilePage() {
           <Card className="rounded-[40px] border-none shadow-sm bg-indigo-500/[0.03]">
              <CardHeader className="pb-2">
                 <CardTitle className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground flex items-center gap-2">
-                  <Briefcase className="h-3.5 w-3.5" /> Network Status
+                  <Briefcase className="h-3.5 w-3.5" /> Hub Visibility
                 </CardTitle>
              </CardHeader>
              <CardContent className="space-y-4">
                 <div className="flex justify-between items-center text-sm">
-                  <span className="text-muted-foreground font-medium">Hub Visibility</span>
+                  <span className="text-muted-foreground font-medium">Status</span>
                   <span className="font-bold text-green-500 bg-green-50 px-2 py-0.5 rounded-full text-[10px]">ACTIVE</span>
                 </div>
                 <div className="flex justify-between items-center text-sm">
@@ -232,8 +235,8 @@ export default function ProfilePage() {
 
         <Card className="lg:col-span-2 rounded-[40px] border-none shadow-2xl overflow-hidden">
           <CardHeader className="bg-indigo-500/[0.02] p-10 border-b border-indigo-100/20">
-            <CardTitle className="text-xl font-bold tracking-tight text-foreground">Core Profile Data</CardTitle>
-            <CardDescription className="text-sm font-medium">Securely persisted in the TalentLink cloud infrastructure.</CardDescription>
+            <CardTitle className="text-xl font-bold tracking-tight text-foreground">Core Professional Data</CardTitle>
+            <CardDescription className="text-sm font-medium">Securely persisted in the cloud infrastructure.</CardDescription>
           </CardHeader>
           <CardContent className="p-10 space-y-8">
             <div className="grid md:grid-cols-2 gap-8">
@@ -292,7 +295,7 @@ export default function ProfilePage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="bio" className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">Bio / Experience Summary</Label>
+              <Label htmlFor="bio" className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">Professional Summary</Label>
               <Textarea
                 id="bio"
                 placeholder="Describe your professional journey..."
@@ -343,7 +346,7 @@ export default function ProfilePage() {
                 className="rounded-full h-14 px-12 font-extrabold text-base bg-indigo-600 hover:bg-indigo-700 shadow-2xl shadow-indigo-500/30 transition-all hover:scale-[1.02] active:scale-[0.98]"
               >
                 {isSaving ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Save className="mr-2 h-5 w-5" />}
-                Persist Profile Changes
+                Persist Changes
               </Button>
             </div>
           </CardContent>

@@ -1,8 +1,11 @@
-import type { FreelancerProfile, JobPosting } from './types';
-import { PlaceHolderImages } from './placeholder-images';
 
-// This file is now empty of hardcoded dummy data to ensure the app stays "real"
-// and data-driven based on Firestore records.
+import type { FreelancerProfile, JobPosting } from './types';
+
+/** 
+ * Data Layer (Empty)
+ * All content is now retrieved in real-time from Firestore to ensure the experience is 
+ * 100% data-driven based on user identity and the hub repository.
+ */
 
 export const freelancerProfile: Partial<FreelancerProfile> = {};
 export const jobPostings: JobPosting[] = [];
