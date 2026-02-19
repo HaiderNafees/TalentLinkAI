@@ -57,7 +57,7 @@ export default function ProfilePage() {
         location: profile.location || '',
         websiteUrl: profile.websiteUrl || '',
         linkedInUrl: profile.linkedInUrl || '',
-        hourlyRate: profile.hourlyRate?.toString() || '',
+        hourlyRate: profile.hourlyRate?.toString() || '0',
       });
     }
   }, [profile]);
@@ -121,18 +121,21 @@ export default function ProfilePage() {
     if (!user || !db) return;
     setIsSaving(true);
     
-    const skillsArray = formData.skills.split(',').map(s => s.trim()).filter(s => s !== '');
+    // Ensure we handle potential undefined skills gracefully
+    const skillsText = formData.skills || '';
+    const skillsArray = skillsText.split(',').map(s => s.trim()).filter(s => s !== '');
+    
     const updateData = {
       id: user.uid,
       email: user.email || '',
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      headline: formData.headline,
-      bio: formData.bio,
+      firstName: formData.firstName || '',
+      lastName: formData.lastName || '',
+      headline: formData.headline || '',
+      bio: formData.bio || '',
       skillIds: skillsArray,
-      location: formData.location,
-      websiteUrl: formData.websiteUrl,
-      linkedInUrl: formData.linkedInUrl,
+      location: formData.location || '',
+      websiteUrl: formData.websiteUrl || '',
+      linkedInUrl: formData.linkedInUrl || '',
       hourlyRate: parseFloat(formData.hourlyRate) || 0,
       updatedDate: new Date().toISOString(),
       availabilityStatus: profile?.availabilityStatus || 'Available',
@@ -140,23 +143,26 @@ export default function ProfilePage() {
 
     const profileDoc = doc(db, 'freelancers', user.uid);
     
-    // Perform background sync with non-blocking pattern for speed
-    setDoc(profileDoc, updateData, { merge: true })
-      .then(() => {
-        toast({
-          title: "Identity Synchronized",
-          description: "Your professional data has been successfully persisted.",
-        });
-        setIsSaving(false);
-      })
-      .catch((error) => {
-        errorEmitter.emit('permission-error', new FirestorePermissionError({
-          path: profileDoc.path,
-          operation: 'update',
-          requestResourceData: updateData,
-        }));
-        setIsSaving(false);
+    try {
+      await setDoc(profileDoc, updateData, { merge: true });
+      toast({
+        title: "Identity Synchronized",
+        description: "Your professional data has been successfully persisted.",
       });
+    } catch (error: any) {
+      errorEmitter.emit('permission-error', new FirestorePermissionError({
+        path: profileDoc.path,
+        operation: 'update',
+        requestResourceData: updateData,
+      }));
+      toast({
+        variant: "destructive",
+        title: "Sync Failed",
+        description: "Could not save profile changes.",
+      });
+    } finally {
+      setIsSaving(false);
+    }
   }
 
   if (isUserLoading || isProfileLoading) {
