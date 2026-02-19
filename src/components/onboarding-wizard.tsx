@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useRef } from 'react';
@@ -134,19 +133,19 @@ export function OnboardingWizard({ onComplete }: { onComplete: () => void }) {
           {step === 1 && (
             <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
               <CardTitle className="text-3xl font-black tracking-tight mb-2">Basic Info</CardTitle>
-              <CardDescription className="text-base font-medium">Set up your professional identity.</CardDescription>
+              <CardDescription className="text-base font-medium">Establish your identity within the network.</CardDescription>
             </div>
           )}
           {step === 2 && (
             <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
-              <CardTitle className="text-3xl font-black tracking-tight mb-2">Capabilities</CardTitle>
-              <CardDescription className="text-base font-medium">Highlight your specialized skills.</CardDescription>
+              <CardTitle className="text-3xl font-black tracking-tight mb-2">Technical Core</CardTitle>
+              <CardDescription className="text-base font-medium">Highlight your specialized capabilities.</CardDescription>
             </div>
           )}
           {step === 3 && (
             <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
-              <CardTitle className="text-3xl font-black tracking-tight mb-2">Ready</CardTitle>
-              <CardDescription className="text-base font-medium">Identity successfully synchronized.</CardDescription>
+              <CardTitle className="text-3xl font-black tracking-tight mb-2">Hub Ready</CardTitle>
+              <CardDescription className="text-base font-medium">Identity synchronized across the network.</CardDescription>
             </div>
           )}
         </CardHeader>
@@ -204,7 +203,7 @@ export function OnboardingWizard({ onComplete }: { onComplete: () => void }) {
                   id="headline" 
                   value={formData.headline}
                   onChange={(e) => setFormData({ ...formData, headline: e.target.value })}
-                  placeholder="e.g. Senior Developer" 
+                  placeholder="e.g. Senior Full-Stack Engineer" 
                   className="rounded-2xl h-12 border-muted-foreground/20 focus:ring-2 focus:ring-indigo-500/20" 
                 />
               </div>
@@ -213,7 +212,7 @@ export function OnboardingWizard({ onComplete }: { onComplete: () => void }) {
                 disabled={!formData.firstName || !formData.lastName || !formData.headline}
                 className="w-full h-14 rounded-full font-bold bg-indigo-600 hover:bg-indigo-700 mt-4 group shadow-2xl shadow-indigo-500/30"
               >
-                Continue <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                Sync Next Step <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
               </Button>
             </div>
           )}
@@ -222,33 +221,33 @@ export function OnboardingWizard({ onComplete }: { onComplete: () => void }) {
             <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
                <div className="grid sm:grid-cols-2 gap-8">
                 <div className="space-y-2">
-                  <Label htmlFor="loc" className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Location</Label>
+                  <Label htmlFor="loc" className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Work Location</Label>
                   <Input 
                     id="loc" 
                     value={formData.location}
                     onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                    placeholder="e.g. London, UK"
+                    placeholder="e.g. London, UK (Remote)"
                     className="rounded-2xl h-12 border-muted-foreground/20 focus:ring-2 focus:ring-indigo-500/20" 
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="skills" className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Skills</Label>
+                  <Label htmlFor="skills" className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Technical Skills</Label>
                   <Input 
                     id="skills" 
                     value={formData.skills}
                     onChange={(e) => setFormData({ ...formData, skills: e.target.value })}
-                    placeholder="e.g. React, Node.js" 
+                    placeholder="React, Next.js, Node.js" 
                     className="rounded-2xl h-12 border-muted-foreground/20 focus:ring-2 focus:ring-indigo-500/20" 
                   />
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="bio" className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Summary</Label>
+                <Label htmlFor="bio" className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Professional Summary</Label>
                 <Textarea 
                   id="bio" 
                   value={formData.bio}
                   onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
-                  placeholder="Tell us about your background..." 
+                  placeholder="Describe your professional trajectory..." 
                   className="rounded-[32px] min-h-[180px] pt-4 border-muted-foreground/20 focus:ring-2 focus:ring-indigo-500/20" 
                 />
               </div>
@@ -259,7 +258,7 @@ export function OnboardingWizard({ onComplete }: { onComplete: () => void }) {
                   disabled={!formData.skills || !formData.bio}
                   className="flex-1 h-14 rounded-full font-bold bg-indigo-600 hover:bg-indigo-700 group shadow-2xl shadow-indigo-500/30"
                 >
-                  Finalize <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                  Finalize Initialization <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </Button>
               </div>
             </div>
@@ -274,8 +273,8 @@ export function OnboardingWizard({ onComplete }: { onComplete: () => void }) {
                 </div>
               </div>
               <div className="space-y-3 max-w-sm mx-auto">
-                <p className="text-2xl font-black tracking-tight">Identity Synced</p>
-                <p className="text-sm text-muted-foreground font-medium leading-relaxed">Your professional hub profile is now active and synchronized across the network.</p>
+                <p className="text-2xl font-black tracking-tight">Identity Established</p>
+                <p className="text-sm text-muted-foreground font-medium leading-relaxed">Your professional credentials have been synchronized with the network core.</p>
               </div>
               <Button 
                 onClick={handleComplete} 
@@ -283,7 +282,7 @@ export function OnboardingWizard({ onComplete }: { onComplete: () => void }) {
                 className="w-full h-16 rounded-full font-black text-lg bg-indigo-600 hover:bg-indigo-700 shadow-2xl shadow-indigo-500/40"
               >
                 {loading ? <Loader2 className="mr-2 h-6 w-6 animate-spin" /> : <Sparkles className="mr-2 h-6 w-6" />}
-                Enter Hub
+                Access Hub Core
               </Button>
             </div>
           )}

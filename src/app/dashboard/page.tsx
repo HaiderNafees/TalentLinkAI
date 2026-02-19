@@ -1,13 +1,12 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
 import { useUser, useFirestore, useCollection, useMemoFirebase, useDoc } from '@/firebase';
-import { collection, doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, doc, setDoc } from 'firebase/firestore';
 import JobCard from '@/components/job-card';
 import PageHeader from '@/components/page-header';
 import { Input } from '@/components/ui/input';
-import { Search, Sparkles, Brain, TrendingUp, Loader2, Briefcase, Plus, Database } from 'lucide-react';
+import { Search, Sparkles, Brain, TrendingUp, Loader2, Plus, Database } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getJobMatch } from '@/lib/actions';
@@ -63,23 +62,6 @@ export default function DashboardPage() {
         experienceLevel: 'Senior',
         location: 'Hybrid (NYC)',
         postedAt: '2h ago'
-      },
-      {
-        id: 'job_sample_3',
-        clientId: user.uid,
-        title: 'Frontend Engineer',
-        company: 'Nexus Flow',
-        description: 'Build polished, high-fidelity user interfaces. Focus on Framer Motion, Tailwind CSS, and performance optimization.',
-        requiredSkills: ['React', 'Tailwind', 'Animations', 'Web Performance'],
-        budgetAmount: 8000,
-        budgetCurrency: 'USD',
-        jobType: 'Fixed-price',
-        locationRequirement: 'Remote',
-        postedDate: new Date().toISOString(),
-        status: 'Open',
-        experienceLevel: 'Mid',
-        location: 'Remote',
-        postedAt: '4h ago'
       }
     ];
 
@@ -145,14 +127,14 @@ export default function DashboardPage() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
         <PageHeader
           title={`Professional Hub`}
-          subtitle={`Welcome back, ${profile.firstName}. Your dashboard is fully synchronized with your identity.`}
+          subtitle={`Welcome back, ${profile.firstName}. Your workspace is fully synchronized.`}
         />
         <div className="flex items-center gap-3 px-5 py-2.5 rounded-2xl bg-indigo-50 border border-indigo-100/50 shadow-sm transition-all hover:shadow-md">
           <div className="relative">
             <Sparkles className="h-5 w-5 text-indigo-600" />
             <div className="absolute -top-1 -right-1 h-2 w-2 bg-indigo-400 rounded-full animate-ping" />
           </div>
-          <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-indigo-700">Database Active</span>
+          <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-indigo-700">Hub Active</span>
         </div>
       </div>
 
@@ -164,10 +146,10 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent className="p-10 pt-4">
             <p className="text-2xl font-bold mb-6 leading-tight max-w-lg">
-              Synchronizing your <span className="text-indigo-200">{profile.skillIds?.[0] || 'Technical Capabilities'}</span> with current project requirements across the network.
+              Synchronizing your <span className="text-indigo-200">{profile.skillIds?.[0] || 'Technical Capabilities'}</span> with current network project requirements.
             </p>
             <Button variant="secondary" className="rounded-2xl font-bold h-12 px-8 bg-white text-indigo-600 hover:bg-indigo-50 shadow-lg shadow-black/10 transition-all">
-              Optimize Profile
+              Optimize Identity
             </Button>
           </CardContent>
         </Card>
@@ -182,21 +164,12 @@ export default function DashboardPage() {
           <CardContent className="p-8 pt-2 space-y-6">
             <div className="space-y-4">
               <div className="flex justify-between items-center">
-                <span className="text-sm font-semibold text-muted-foreground">Active Projects</span>
+                <span className="text-sm font-semibold text-muted-foreground">Active Opportunities</span>
                 <span className="text-xl font-black text-foreground">{rawJobs?.length || 0}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm font-semibold text-muted-foreground">Hub Status</span>
                 <span className="text-sm font-extrabold text-indigo-600 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100">SYNCED</span>
-              </div>
-            </div>
-            <div className="space-y-2">
-              <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-                <span>Data Integrity</span>
-                <span>100%</span>
-              </div>
-              <div className="h-3 bg-secondary rounded-full overflow-hidden p-0.5">
-                <div className="h-full bg-indigo-600 rounded-full shadow-[0_0_10px_rgba(79,70,229,0.5)] w-full transition-all duration-1000" />
               </div>
             </div>
           </CardContent>
@@ -237,9 +210,9 @@ export default function DashboardPage() {
               <Database className="h-12 w-12" />
             </div>
             <div className="space-y-3">
-              <h3 className="text-3xl font-black tracking-tight text-foreground">Hub Data Missing</h3>
+              <h3 className="text-3xl font-black tracking-tight text-foreground">Hub Repository Empty</h3>
               <p className="text-lg text-muted-foreground font-medium max-w-sm mx-auto leading-relaxed">
-                The repository is currently empty. Initialize with professional sample data to test the matching system.
+                Connect your first projects or initialize with sample data to test the Intelligence Hub.
               </p>
             </div>
             <Button 
@@ -247,7 +220,7 @@ export default function DashboardPage() {
               className="rounded-full px-14 h-16 bg-indigo-600 font-extrabold text-lg hover:bg-indigo-700 shadow-2xl shadow-indigo-500/40 transition-all group"
             >
               <Plus className="mr-2 h-6 w-6 group-hover:rotate-90 transition-transform" />
-              Initialize Hub Data
+              Initialize Hub Repository
             </Button>
           </div>
         )}

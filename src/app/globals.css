@@ -23,7 +23,7 @@
     --border: 220 13% 91%;
     --input: 220 13% 91%;
     --ring: 243 75% 59%;
-    --radius: 0.75rem;
+    --radius: 1rem;
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 224 71% 4%;
     --sidebar-primary: 243 75% 59%;
@@ -70,7 +70,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground font-body;
+    @apply bg-background text-foreground font-body antialiased;
   }
 }
 
